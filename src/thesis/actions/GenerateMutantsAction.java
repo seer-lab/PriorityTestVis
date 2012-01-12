@@ -14,12 +14,12 @@ import org.eclipse.jface.dialogs.MessageDialog;
  * delegated to it.
  * @see IWorkbenchWindowActionDelegate
  */
-public class SampleAction implements IWorkbenchWindowActionDelegate {
+public class GenerateMutantsAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 	/**
 	 * The constructor.
 	 */
-	public SampleAction() {
+	public GenerateMutantsAction() {
 	}
 
 	/**
@@ -32,7 +32,8 @@ public class SampleAction implements IWorkbenchWindowActionDelegate {
 		MessageDialog.openInformation(
 			window.getShell(),
 			"Thesis",
-			"Hello, Eclipse world");
+			"Code needs to be added here for generating the mutants.\n" +
+			"This could be done with many other tools such as MuJava or ConMAn");
 	}
 
 	/**
