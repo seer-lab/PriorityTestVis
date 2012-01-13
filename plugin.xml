@@ -22,7 +22,16 @@
                tooltip="Generate Mutants"
                menubarPath="thesisMenu/thesisGroup"
                toolbarPath="thesisGroup"
-               id="thesis.actions.ThesisAction">
+               id="thesis.actions.GenerateMutantsAction">
+         </action>
+         <action
+         		label="&amp;Run Test Suite"
+         		icon="icons/sample.gif"
+         		class="thesis.actions.RunTestSuiteAction"
+         		tooltip="Run Test Suite"
+         		menubarPath="thesisMenu/thesisGroup"
+         		toolbarPath="thesisGroup"
+         		id="thesis.actions.RunTestSuiteAction">
          </action>
       </actionSet>
    </extension>
