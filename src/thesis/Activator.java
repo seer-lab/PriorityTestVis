@@ -1,8 +1,13 @@
 package thesis;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import thesis.data.Mutant;
+import thesis.data.TestResult;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -15,10 +20,15 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	
+	public static ArrayList<Mutant> mutantList;
+	public static ArrayList<TestResult> testList;
+	
 	/**
 	 * The constructor
 	 */
 	public Activator() {
+		mutantList=new ArrayList<Mutant>();
+		testList=new ArrayList<TestResult>();
 	}
 
 	/*

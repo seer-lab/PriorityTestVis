@@ -1,10 +1,15 @@
 package thesis.actions;
 
+import java.util.Random;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.jface.dialogs.MessageDialog;
+
+import thesis.Activator;
+import thesis.data.Mutant;
 
 /**
  * Our sample action implements workbench action delegate.
@@ -34,6 +39,14 @@ public class GenerateMutantsAction implements IWorkbenchWindowActionDelegate {
 			"Thesis",
 			"Code needs to be added here for generating the mutants.\n" +
 			"This could be done with many other tools such as MuJava or ConMAn");
+		
+		//Generate some fake results
+		Random rand=new Random();
+		for(int x=0;x<10000;x++){
+			Mutant e=new Mutant("Foo", rand.nextInt(1000), "Bar");
+			Activator.getDefault().mutantList.add(e);
+		}
+		
 	}
 
 	/**

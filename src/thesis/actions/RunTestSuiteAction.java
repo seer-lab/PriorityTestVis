@@ -1,10 +1,21 @@
 package thesis.actions;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+
+import thesis.Activator;
+import thesis.data.TestResult;
 
 public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 	private IWorkbenchWindow window;
@@ -15,7 +26,38 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				window.getShell(),
 				"Thesis",
 				"Allow the user to select the test suite they wish to use and" +
-				"run it against the generated mutants");
+				"run it against the generated mutants" +
+				"\n "+Activator.getDefault().mutantList.size()+" mutants");
+		Random rand=new Random();
+		
+		Display display=new Display();
+		Shell shell=new Shell(display);
+		ProgressBar pb=new ProgressBar(shell, SWT.NULL);
+		pb.setSelection(60);
+		pb.setBounds(100, 20, 200, 20);
+		pb.setMaximum(157);
+		
+		Label label=new Label(shell,SWT.NULL);
+		label.setText("Running Tests");
+		label.setAlignment(SWT.RIGHT);
+		label.setBounds(10, 10, 80, 20);
+		shell.pack();
+		shell.open();
+		
+		for(int x=0;x<157;x++){
+			long time=rand.nextInt(100);
+			try{Thread.sleep(time);}catch(InterruptedException e){};
+			int number_killed=rand.nextInt(150)+50;
+			ArrayList<Integer> detected_mutants=new ArrayList<Integer>();
+			for(int n=0;n<number_killed;n++){
+				detected_mutants.add(rand.nextInt(10000));
+			}
+			TestResult e=new TestResult(x,time,detected_mutants);
+			Activator.getDefault().testList.add(e);
+			int percent=x/157*100;
+			pb.setSelection(percent);
+		}
+		display.dispose();
 	}
 
 	@Override
