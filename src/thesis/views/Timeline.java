@@ -42,8 +42,8 @@ public class Timeline extends ViewPart{
 		for(int x=0;x<testData.size();x++)
 			total_time+=testData.get(x).getTime();
 		label.setText(total_time+"");
-
 	}
+	
 	public void setFocus() {
 		drawTimeLine();
 		label.setFocus();
