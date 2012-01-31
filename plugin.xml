@@ -33,6 +33,15 @@
          		toolbarPath="thesisGroup"
          		id="thesis.actions.RunTestSuiteAction">
          </action>
+         <action
+         		label="&amp;Change Time Limit"
+         		icon="icons/sample.gif"
+         		class="thesis.actions.ChangeTimeLimit"
+         		tooltip="Change Time Limit"
+         		menubarPath="thesisMenu/thesisGroup"
+         		toolbarPath="thesisGroup"
+         		id="thesis.actions.ChangeTimeLimit">
+         </action>
       </actionSet>
    </extension>
 
