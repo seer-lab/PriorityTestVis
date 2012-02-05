@@ -30,20 +30,6 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				"\n "+Activator.getDefault().mutantList.size()+" mutants");
 		Random rand=new Random();
 		
-//		Display display=new Display();
-//		Shell shell=new Shell(display);
-//		ProgressBar pb=new ProgressBar(shell, SWT.NULL);
-//		pb.setSelection(60);
-//		pb.setBounds(100, 20, 200, 20);
-//		pb.setMaximum(157);
-//		
-//		Label label=new Label(shell,SWT.NULL);
-//		label.setText("Running Tests");
-//		label.setAlignment(SWT.RIGHT);
-//		label.setBounds(10, 10, 80, 20);
-//		shell.pack();
-//		shell.open();
-		
 		for(int x=0;x<157;x++){
 			long time=rand.nextInt(100);
 			try{Thread.sleep(time);}catch(InterruptedException e){};
@@ -54,10 +40,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			}
 			TestResult e=new TestResult(x,time,detected_mutants);
 			Activator.getDefault().testList.add(e);
-//			int percent=x/157*100;
-//			pb.setSelection(percent);
 		}
-//		display.dispose();
 	}
 
 	@Override
