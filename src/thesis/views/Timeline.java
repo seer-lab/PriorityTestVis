@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
@@ -26,27 +27,25 @@ import thesis.data.TestResult;
 public class Timeline extends ViewPart{
 	public static final String ID = "testview.views.SampleView";
 	private ArrayList<TestResult> testData;
-	private Label label;
+	private Canvas canvas;
 	
 	public Timeline(){super();}
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		label = new Label(parent,0);
-		label.setText("Foobar");
+		canvas=new Canvas(parent,SWT.NONE);
 	}
 
-	private void drawTimeLine(){
-		testData=Activator.getDefault().testList;
-		double total_time=0.0;
-		for(int x=0;x<testData.size();x++)
-			total_time+=testData.get(x).getTime();
-		label.setText(total_time+"");
+	private void updateGraphics(){
+		
+		GC gc=new GC(canvas);
+		gc.drawRectangle(0,0,50,50);
+		gc.dispose();
 	}
 	
 	public void setFocus() {
-		drawTimeLine();
-		label.setFocus();
+		updateGraphics();
+		canvas.setFocus();
 	}
 
 }
