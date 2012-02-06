@@ -60,6 +60,7 @@ public class Timeline extends ViewPart{
 //		if(testData.size()>0){
 			double time=testData.get(x).getTime();
 			int kills=testData.get(x).getDetectedMutants().size();
+			int uniqueKills=testData.get(x).getUniqueMutants().size();
 			
 			if(running_time<(total_time+time)){
 				int xStart=(int)(running_time*time_ratio);
@@ -69,6 +70,10 @@ public class Timeline extends ViewPart{
 				
 				gc.setBackground(kUnique);
 				gc.fillRectangle(xStart,total_height-yEnd,xEnd-xStart,yEnd);
+				
+				yEnd=(int)(uniqueKills*score_ratio);
+				gc.setBackground(kNonUnique);
+				gc.fillRectangle(xStart,total_height-yEnd,xEnd-xStart,yEnd/2);
 
 				gc.setForeground(kOutline);
 				gc.drawRectangle(xStart,total_height-yEnd,xEnd-xStart,yEnd);
@@ -78,6 +83,8 @@ public class Timeline extends ViewPart{
 		}
 		gc.dispose();
 	}
+	
+	
 	
 	public void setFocus() {
 		updateTestData();

@@ -12,9 +12,19 @@ public class TestResult {
 	private ArrayList<Integer> detectedMutants;
 	public ArrayList<Integer> getDetectedMutants(){return detectedMutants;}
 	
+	private ArrayList<Integer> uniqueMutants;
+	public ArrayList<Integer> getUniqueMutants(){return uniqueMutants;}
+	
+	public void removeUniqueness(ArrayList<Integer> comparableData){
+		for(int x=0;x<comparableData.size();x++)
+			if(uniqueMutants.contains(comparableData.get(x)))
+				uniqueMutants.remove(comparableData.get(x));
+	}
+	
 	public TestResult(int id,double t,ArrayList<Integer> detected){
 		testID=id;
 		time=t;
 		detectedMutants=detected;
+		uniqueMutants=detected;
 	}
 }
