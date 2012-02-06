@@ -30,6 +30,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				"\n "+Activator.getDefault().mutantList.size()+" mutants");
 		Random rand=new Random();
 		
+		//Generate test data
 		for(int x=0;x<157;x++){
 			long time=rand.nextInt(300);
 			time+=50;
@@ -42,6 +43,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			TestResult e=new TestResult(x,time,detected_mutants);
 			Activator.getDefault().testList.add(e);
 		}
+		
 	}
 
 	@Override

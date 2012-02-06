@@ -16,10 +16,13 @@ public class TestResult {
 	public ArrayList<Integer> getUniqueMutants(){return uniqueMutants;}
 	
 	public void removeUniqueness(ArrayList<Integer> comparableData){
+		uniqueMutants=detectedMutants;
+		
 		for(int x=0;x<comparableData.size();x++)
 			if(uniqueMutants.contains(comparableData.get(x)))
 				uniqueMutants.remove(comparableData.get(x));
 	}
+	
 	
 	public TestResult(int id,double t,ArrayList<Integer> detected){
 		testID=id;

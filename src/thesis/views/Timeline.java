@@ -45,31 +45,47 @@ public class Timeline extends ViewPart{
 		int x=0;
 		
 		GC gc=new GC(canvas);
+		
+		
+		ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
+		//Add the mutation blocks sequentialy until the time limit is reached
+		int testsSelected=0; //This is a kludge variable used to store the number of tests selected
 		while(x<testData.size()&&running_time<total_time){
-//		if(testData.size()>0){
 			double time=testData.get(x).getTime();
 			int kills=testData.get(x).getDetectedMutants().size();
-			int uniqueKills=testData.get(x).getUniqueMutants().size();
 			
-			if(running_time<(total_time+time)){
+			
+			if(running_time<(total_time+time)){//We can add a new test now
+				testsSelected++;
+				testData.get(x).removeUniqueness(previously_detected_mutants);
+				int uniqueKills=testData.get(x).getUniqueMutants().size();//TODO Move this until after the set of tests is selected
+				
+				previously_detected_mutants.addAll(testData.get(x).getDetectedMutants());
 				int xStart=(int)(running_time*time_ratio);
 				int xEnd=(int)((running_time+time)*time_ratio);
 				int yEnd=(int)(kills*score_ratio);
 				System.out.println(xStart+":"+xEnd);
 				
-				gc.setBackground(kUnique);
+				gc.setBackground(kNonUnique);
 				gc.fillRectangle(xStart,total_height-yEnd,xEnd-xStart,yEnd);
 				
-				yEnd=(int)(uniqueKills*score_ratio);
-				gc.setBackground(kNonUnique);
-				gc.fillRectangle(xStart,total_height-yEnd,xEnd-xStart,yEnd/2);
-
+				
+				int yEnd2=(int)(uniqueKills*score_ratio);
+				gc.setBackground(kUnique);
+				gc.fillRectangle(xStart,total_height-yEnd2,xEnd-xStart,yEnd2);
+				
 				gc.setForeground(kOutline);
 				gc.drawRectangle(xStart,total_height-yEnd,xEnd-xStart,yEnd);
+
 			}
 			running_time+=time;
 			x++;
 		}
+		
+		for(int i=0;i<testsSelected;i++){
+			TestResult test=testData.get(x);
+		}
+		
 		gc.dispose();
 	}
 	
