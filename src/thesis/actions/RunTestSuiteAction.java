@@ -31,7 +31,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 		Random rand=new Random();
 		
 		for(int x=0;x<157;x++){
-			long time=rand.nextInt(100);
+			long time=rand.nextInt(300);
 			time+=50;
 			try{Thread.sleep(time);}catch(InterruptedException e){};
 			int number_killed=rand.nextInt(150)+50;
