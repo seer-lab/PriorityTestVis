@@ -16,32 +16,38 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import thesis.Activator;
 import thesis.data.TestResult;
+import thesis.views.Timeline;
 
 public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 	private IWorkbenchWindow window;
 	public RunTestSuiteAction(){}
 	@Override
 	public void run(IAction action) {
-		MessageDialog.openInformation(
-				window.getShell(),
-				"Thesis",
-				"Allow the user to select the test suite they wish to use and" +
-				"run it against the generated mutants" +
-				"\n "+Activator.getDefault().mutantList.size()+" mutants");
-		Random rand=new Random();
-		
-		//Generate test data
-		for(int x=0;x<157;x++){
-			long time=rand.nextInt(300);
-			time+=50;
-			try{Thread.sleep(time);}catch(InterruptedException e){};
-			int number_killed=rand.nextInt(150)+50;
-			ArrayList<Integer> detected_mutants=new ArrayList<Integer>();
-			for(int n=0;n<number_killed;n++){
-				detected_mutants.add(rand.nextInt(10000));
+//		MessageDialog.openInformation(
+//				window.getShell(),
+//				"Thesis",
+//				"Allow the user to select the test suite they wish to use and" +
+//				"run it against the generated mutants" +
+//				"\n "+Activator.getDefault().mutantList.size()+" mutants");
+		if(Activator.getDefault().mutantList.size()!=0){
+			Activator.getDefault().testList.clear();
+			Random rand=new Random();
+			
+			//Generate test data
+			for(int x=0;x<157;x++){
+				long time=rand.nextInt(300);
+				time+=50;
+				try{Thread.sleep(time);}catch(InterruptedException e){};
+				int number_killed=rand.nextInt(150)+50;
+				ArrayList<Integer> detected_mutants=new ArrayList<Integer>();
+				for(int n=0;n<number_killed;n++){
+					detected_mutants.add(rand.nextInt(10000));
+				}
+				TestResult e=new TestResult(x,time,detected_mutants);
+				Activator.getDefault().testList.add(e);
 			}
-			TestResult e=new TestResult(x,time,detected_mutants);
-			Activator.getDefault().testList.add(e);
+			
+			Timeline.update(Activator.getDefault().testList);
 		}
 		
 	}

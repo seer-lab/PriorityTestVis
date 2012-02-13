@@ -12,12 +12,19 @@ public class TestResult {
 	private ArrayList<Integer> detectedMutants;
 	public ArrayList<Integer> getDetectedMutants(){return detectedMutants;}
 	
+	private ArrayList<Integer> trueUniqueMutants;
+	public ArrayList<Integer> getTrueUniqueMutants(){return trueUniqueMutants;}
+	
 	private ArrayList<Integer> uniqueMutants;
 	public ArrayList<Integer> getUniqueMutants(){return uniqueMutants;}
 	
+	public void removeTrueUniqueness(ArrayList<Integer> comparableData){
+		for(int x=0;x<comparableData.size();x++)
+			if(trueUniqueMutants.contains(comparableData.get(x)))
+				trueUniqueMutants.remove(comparableData.get(x));
+	}
+	
 	public void removeUniqueness(ArrayList<Integer> comparableData){
-		uniqueMutants=detectedMutants;
-		
 		for(int x=0;x<comparableData.size();x++)
 			if(uniqueMutants.contains(comparableData.get(x)))
 				uniqueMutants.remove(comparableData.get(x));
@@ -25,9 +32,13 @@ public class TestResult {
 	
 	
 	public TestResult(int id,double t,ArrayList<Integer> detected){
+		detectedMutants=new ArrayList<Integer>();
+		trueUniqueMutants=new ArrayList<Integer>();
+		uniqueMutants=new ArrayList<Integer>();
 		testID=id;
 		time=t;
-		detectedMutants=detected;
-		uniqueMutants=detected;
+		detectedMutants.addAll(detected);
+		trueUniqueMutants=detected;
+		uniqueMutants.addAll(detectedMutants);
 	}
 }

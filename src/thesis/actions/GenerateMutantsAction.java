@@ -34,12 +34,13 @@ public class GenerateMutantsAction implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 	public void run(IAction action) {
-		MessageDialog.openInformation(
-			window.getShell(),
-			"Thesis",
-			"Code needs to be added here for generating the mutants.\n" +
-			"This could be done with many other tools such as MuJava or ConMAn");
-		
+//		MessageDialog.openInformation(
+//			window.getShell(),
+//			"Thesis",
+//			"Code needs to be added here for generating the mutants.\n" +
+//			"This could be done with many other tools such as MuJava or ConMAn");
+		Activator.getDefault().mutantList.clear();
+		Activator.getDefault().testList.clear();
 		//Generate some fake results
 		Random rand=new Random();
 		for(int x=0;x<10000;x++){
