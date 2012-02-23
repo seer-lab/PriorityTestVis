@@ -3,6 +3,8 @@ package thesis.views;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
@@ -11,7 +13,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.part.ViewPart;
 
-import thesis.Activator;
 import thesis.data.TestResult;
 
 public class Timeline extends ViewPart{
@@ -19,16 +20,17 @@ public class Timeline extends ViewPart{
 	private static ArrayList<TestResult> testData,selectedList,nonSelectedList;
 	private static Canvas canvas;
 	private static GC gc;
+	private static Composite selectionAndPoolHolder;
 	private static Group selectionHolder;
+	private static Group poolHolder;
 	private final static int kTotal_time=10000;
 	private final static int kMax_kills=200;
 	
 	private static ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
 	
-	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private final static Color kUnique=Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
-	private static final Color kNonUnique=Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
-	private final static Color kTrueUnique=Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
+	private static TimelinePainter tlPainter;
+	
+	
 	
 	public static void update(ArrayList<TestResult> tests){
 		testData=tests;
@@ -40,61 +42,19 @@ public class Timeline extends ViewPart{
 	
 	@Override
 	public void createPartControl(Composite parent) {
+//		selectionAndPoolHolder=new Composite(parent, SWT.NONE);
 //		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
-		canvas=new Canvas(parent,SWT.NONE);
-		gc=new GC(canvas);
+		canvas=new Canvas(parent,SWT.NO_REDRAW_RESIZE);
+//		gc=new GC(canvas);
 		testData=new ArrayList<TestResult>();
 		selectedList=new ArrayList<TestResult>();
 		nonSelectedList=new ArrayList<TestResult>();
+		tlPainter=new TimelinePainter(canvas,selectedList);
+		canvas.addPaintListener(tlPainter);
 	}
 
 	private static void updateGraphics(){
-		int current_x=0;
-		int total_width=canvas.getClientArea().width;
-		double width_ratio=(double)total_width/kTotal_time;
-		for(int i=0;i<selectedList.size();i++){
-			TestResult test=selectedList.get(i);
-			int width=(int)(test.getTime()*width_ratio);
-			drawTestResult(test,current_x, width, true);
-			current_x+=width;
-		}
-	}
-	
-	private static void drawTestResult(TestResult test,int startx,int width,boolean detected){
-		
-		int total_height=canvas.getClientArea().height;
-		double height_ratio=(double)total_height/(double)kMax_kills;
-		
-		int kills;
-		Color nonUnique,unique,trueUnique;
-		if(detected){
-			nonUnique=kNonUnique;
-			unique=kUnique;
-			trueUnique=kTrueUnique;
-		}else{//TODO change the colours for false
-			nonUnique=kNonUnique;
-			unique=kUnique;
-			trueUnique=kTrueUnique;
-		}
-		//Draw non unique kills
-		gc.setBackground(nonUnique);
-		kills=(int)(height_ratio*test.getDetectedMutants().size());
-		gc.fillRectangle(startx, total_height-kills, width, kills);
-		
-		//Draw unique kills
-		gc.setBackground(unique);
-		kills=(int)(height_ratio*test.getUniqueMutants().size());
-		gc.fillRectangle(startx, total_height-kills, width, kills);
-		
-		//Draw True Unique kills
-		gc.setBackground(trueUnique);
-		kills=(int)(height_ratio*test.getTrueUniqueMutants().size());
-		gc.fillRectangle(startx, total_height-kills, width, kills);
-		
-		//Draw outline of test
-		gc.setForeground(kOutline);
-		kills=(int)(height_ratio*test.getDetectedMutants().size());
-		gc.drawRectangle(startx, total_height-kills, width, kills);
+		tlPainter.drawGraphics(gc);
 	}
 	@Override
 	public void dispose() {
@@ -102,9 +62,10 @@ public class Timeline extends ViewPart{
 	};
 	
 	public void setFocus() {
-		updateGraphics();
 		canvas.setFocus();
 	}
+	
+	
 	
 	private static void addTestToSet(TestResult testToAdd){
 		nonSelectedList.remove(testToAdd);
@@ -120,6 +81,7 @@ public class Timeline extends ViewPart{
 		}
 		
 		selectedList.add(testToAdd);
+		tlPainter.update(selectedList);
 	}
 	
 	private void removeTestFromSet(TestResult testToRemove){
@@ -133,5 +95,6 @@ public class Timeline extends ViewPart{
 			while(currentTime<kTotal_time)
 				addTestToSet(nonSelectedList.get(0));
 	}
+
 
 }
