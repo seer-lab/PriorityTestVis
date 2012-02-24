@@ -52,10 +52,6 @@ public class Timeline extends ViewPart{
 	private static void updateGraphics(){
 		tlPainter.drawGraphics(gc);
 	}
-	@Override
-	public void dispose() {
-		gc.dispose();
-	};
 	
 	public void setFocus() {
 		canvas.setFocus();
