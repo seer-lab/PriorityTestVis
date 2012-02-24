@@ -30,6 +30,10 @@ public class TestResult {
 				uniqueMutants.remove(comparableData.get(x));
 	}
 	
+//	public void resetUniqueness(){
+//		
+//	}
+	
 	
 	public TestResult(int id,double t,ArrayList<Integer> detected){
 		detectedMutants=new ArrayList<Integer>();

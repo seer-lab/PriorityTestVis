@@ -17,10 +17,12 @@ public class TimelinePainter implements PaintListener {
 	private final static int kMax_kills=200;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+	private final static Color kEclipseBackground=new Color(null,220,220,220);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
 	private static final Color kNonUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
 	private final static Color kTrueUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
+	
 	
 	private final static Color kNonSelectedNonUnique=Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
 	private final static Color kNonSelectedUnique=Display.getCurrent().getSystemColor(SWT.COLOR_RED);
@@ -37,8 +39,12 @@ public class TimelinePainter implements PaintListener {
 	}
 	
 	public void drawGraphics(GC gc){
+		System.out.println("Drawing the graphics");
 		int current_x=0;
 		int total_width=canvas.getClientArea().width;
+		
+//		gc.setBackground(kEclipseBackground);
+//		gc.drawRectangle(0,0,total_width,canvas.getClientArea().height);
 		
 		double width_ratio=(double)total_width/kTotal_time;
 		for(int i=0;i<selectedList.size();i++){

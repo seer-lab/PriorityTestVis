@@ -30,6 +30,8 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 //				"run it against the generated mutants" +
 //				"\n "+Activator.getDefault().mutantList.size()+" mutants");
 		if(Activator.getDefault().mutantList.size()!=0){
+			
+			
 			Activator.getDefault().testList.clear();
 			Random rand=new Random();
 			

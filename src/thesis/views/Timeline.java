@@ -41,7 +41,7 @@ public class Timeline extends ViewPart{
 //		selectionAndPoolHolder=new Composite(parent, SWT.NONE);
 //		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
 		canvas=new Canvas(parent,SWT.NO_REDRAW_RESIZE);
-//		gc=new GC(canvas);
+		gc=new GC(canvas);
 		testData=new ArrayList<TestResult>();
 		selectedList=new ArrayList<TestResult>();
 		nonSelectedList=new ArrayList<TestResult>();
@@ -87,9 +87,15 @@ public class Timeline extends ViewPart{
 	
 	private static void selectTestsToAddToSet(){
 		int currentTime=0;
-		if(nonSelectedList.size()>0)
-			while(currentTime<kTotal_time)
-				addTestToSet(nonSelectedList.get(0));
+		if(nonSelectedList.size()>0){
+			while(currentTime<kTotal_time){
+				if(nonSelectedList.size()==0){
+					break;
+				}else{
+					addTestToSet(nonSelectedList.get(0));
+				}
+			}
+		}
 	}
 
 
