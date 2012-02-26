@@ -25,7 +25,7 @@ public class Timeline extends ViewPart{
 	
 	private static ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
 	
-	private static TimelinePainter tlPainter;
+	private static TimelinePainterSelectedTests tlPainter;
 	
 	
 	public static void update(ArrayList<TestResult> tests){
@@ -46,13 +46,14 @@ public class Timeline extends ViewPart{
 		selectionHolder.setLayout(new FillLayout());
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
+		poolHolder.setLayout(new FillLayout());
 		canvas=new Canvas(selectionHolder,SWT.NONE);
 //		canvas.setBounds(selectionHolder.getBounds());
 		gc=new GC(canvas);
 		testData=new ArrayList<TestResult>();
 		selectedList=new ArrayList<TestResult>();
 		nonSelectedList=new ArrayList<TestResult>();
-		tlPainter=new TimelinePainter(canvas,selectedList);
+		tlPainter=new TimelinePainterSelectedTests(canvas,selectedList);
 		canvas.addPaintListener(tlPainter);
 	}
 

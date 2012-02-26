@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display;
 
 import thesis.data.TestResult;
 
-public class TimelinePainter implements PaintListener {
+public class TimelinePainterSelectedTests implements PaintListener {
 	private final static int kTotal_time=10000;
 	private final static int kMax_kills=200;
 	
@@ -31,7 +31,7 @@ public class TimelinePainter implements PaintListener {
 	private static Canvas canvas;
 	private static ArrayList<TestResult> selectedList;
 	
-	public TimelinePainter(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
+	public TimelinePainterSelectedTests(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
 
 	@Override
 	public void paintControl(PaintEvent e) {
@@ -41,12 +41,13 @@ public class TimelinePainter implements PaintListener {
 	public void drawGraphics(GC gc){
 		int current_x=0;
 		int total_width=canvas.getClientArea().width;
-		System.out.println(total_width);
 		
 //		gc.setBackground(kEclipseBackground);
 //		gc.drawRectangle(0,0,total_width,canvas.getClientArea().height);
 		
 		double width_ratio=(double)total_width/kTotal_time;
+		
+		//Draw the Selected Tests
 		for(int i=0;i<selectedList.size();i++){
 			TestResult test=selectedList.get(i);
 			int width=(int)(test.getTime()*width_ratio);
