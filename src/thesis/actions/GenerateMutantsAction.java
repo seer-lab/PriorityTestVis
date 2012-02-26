@@ -43,7 +43,7 @@ public class GenerateMutantsAction implements IWorkbenchWindowActionDelegate {
 		Activator.getDefault().testList.clear();
 		//Generate some fake results
 		Random rand=new Random();
-		for(int x=0;x<10000;x++){
+		for(int x=0;x<3500;x++){
 			Mutant e=new Mutant("Foo", rand.nextInt(1000), "Bar");
 			Activator.getDefault().mutantList.add(e);
 		}

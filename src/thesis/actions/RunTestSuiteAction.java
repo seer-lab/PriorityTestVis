@@ -43,7 +43,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				int number_killed=rand.nextInt(150)+50;
 				ArrayList<Integer> detected_mutants=new ArrayList<Integer>();
 				for(int n=0;n<number_killed;n++){
-					detected_mutants.add(rand.nextInt(10000));
+					detected_mutants.add(rand.nextInt(3500));
 				}
 				TestResult e=new TestResult(x,time,detected_mutants);
 				Activator.getDefault().testList.add(e);

@@ -104,7 +104,6 @@ public class Timeline extends ViewPart{
 		int currentTime=0;
 		if(nonSelectedList.size()>0){
 			while(currentTime<kTotal_time){
-				System.out.println(nonSelectedList.size());
 				if(nonSelectedList.size()==0){
 					break;
 				}else{
