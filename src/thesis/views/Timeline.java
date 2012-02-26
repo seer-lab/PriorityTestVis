@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -27,7 +28,6 @@ public class Timeline extends ViewPart{
 	private static TimelinePainter tlPainter;
 	
 	
-	
 	public static void update(ArrayList<TestResult> tests){
 		testData=tests;
 		nonSelectedList=testData;
@@ -38,9 +38,15 @@ public class Timeline extends ViewPart{
 	
 	@Override
 	public void createPartControl(Composite parent) {
-//		selectionAndPoolHolder=new Composite(parent, SWT.NONE);
-//		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
-		canvas=new Canvas(parent,SWT.NO_REDRAW_RESIZE);
+		FillLayout fill=new FillLayout();
+		fill.type=SWT.VERTICAL;
+		parent.setLayout(fill);
+		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
+		selectionHolder.setText("Selected Tests");
+		poolHolder=new Group(parent, SWT.SHADOW_NONE);
+		poolHolder.setText("Test Pool");
+		canvas=new Canvas(parent,SWT.NONE);
+//		canvas.setBounds(selectionHolder.getBounds());
 		gc=new GC(canvas);
 		testData=new ArrayList<TestResult>();
 		selectedList=new ArrayList<TestResult>();
@@ -54,6 +60,8 @@ public class Timeline extends ViewPart{
 	}
 	
 	public void setFocus() {
+		selectionHolder.setFocus();
+		poolHolder.setFocus();
 		canvas.setFocus();
 	}
 	

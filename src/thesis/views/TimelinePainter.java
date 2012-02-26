@@ -39,9 +39,9 @@ public class TimelinePainter implements PaintListener {
 	}
 	
 	public void drawGraphics(GC gc){
-		System.out.println("Drawing the graphics");
 		int current_x=0;
 		int total_width=canvas.getClientArea().width;
+		System.out.println(total_width);
 		
 //		gc.setBackground(kEclipseBackground);
 //		gc.drawRectangle(0,0,total_width,canvas.getClientArea().height);
