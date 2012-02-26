@@ -43,9 +43,10 @@ public class Timeline extends ViewPart{
 		parent.setLayout(fill);
 		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
 		selectionHolder.setText("Selected Tests");
+		selectionHolder.setLayout(new FillLayout());
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
-		canvas=new Canvas(parent,SWT.NONE);
+		canvas=new Canvas(selectionHolder,SWT.NONE);
 //		canvas.setBounds(selectionHolder.getBounds());
 		gc=new GC(canvas);
 		testData=new ArrayList<TestResult>();
