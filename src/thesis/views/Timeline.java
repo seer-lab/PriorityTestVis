@@ -60,7 +60,7 @@ public class Timeline extends ViewPart{
 		tlPainterSelected=new TimelinePainterSelectedTests(canvasSelected,selectedList);
 		canvasSelected.addPaintListener(tlPainterSelected);
 		
-		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, selectedList);
+		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, nonSelectedList);
 		canvasUnselected.addPaintListener(tlPainterUnSelected);
 	}
 
@@ -92,7 +92,7 @@ public class Timeline extends ViewPart{
 		
 		selectedList.add(testToAdd);
 		tlPainterSelected.update(selectedList);
-		tlPainterUnSelected.update(selectedList);
+		tlPainterUnSelected.update(nonSelectedList);
 	}
 	
 	private void removeTestFromSet(TestResult testToRemove){
@@ -104,13 +104,16 @@ public class Timeline extends ViewPart{
 		int currentTime=0;
 		if(nonSelectedList.size()>0){
 			while(currentTime<kTotal_time){
+				System.out.println(nonSelectedList.size());
 				if(nonSelectedList.size()==0){
 					break;
 				}else{
+					currentTime+=nonSelectedList.get(0).getTime();
 					addTestToSet(nonSelectedList.get(0));
 				}
 			}
 		}
+		tlPainterUnSelected.update(nonSelectedList);
 	}
 
 
