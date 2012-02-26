@@ -12,10 +12,9 @@ import org.eclipse.swt.widgets.Display;
 
 import thesis.data.TestResult;
 
-public class TimelinePainterSelectedTests implements PaintListener {
+public class TimelinePainterTestPool implements PaintListener{
 	private final static int kTotal_time=10000;
 	private final static int kMax_kills=200;
-	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kEclipseBackground=new Color(null,220,220,220);
 	
@@ -29,10 +28,10 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private final static Color kNonSelectedTrueUnique=Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
 	
 	private static Canvas canvas;
-	private static ArrayList<TestResult> selectedList;
-	
-	public TimelinePainterSelectedTests(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
+	private static ArrayList<TestResult> unselectedList;
 
+	public TimelinePainterTestPool(Canvas c,ArrayList<TestResult> list){canvas=c;unselectedList=list;}
+	
 	@Override
 	public void paintControl(PaintEvent e) {drawGraphics(e.gc);}
 	
@@ -46,15 +45,15 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		double width_ratio=(double)total_width/kTotal_time;
 		
 		//Draw the Selected Tests
-		for(int i=0;i<selectedList.size();i++){
-			TestResult test=selectedList.get(i);
+		for(int i=0;i<unselectedList.size();i++){
+			TestResult test=unselectedList.get(i);
 			int width=(int)(test.getTime()*width_ratio);
 			drawTestResult(gc,test,current_x, width);
 			current_x+=width;
 		}
 	}
 	
-	public void update(ArrayList<TestResult> list){selectedList=list;}
+	public void update(ArrayList<TestResult> list){unselectedList=list;}
 	
 	private static void drawTestResult(GC gc,TestResult test,int startx,int width){
 		int total_height=canvas.getClientArea().height;

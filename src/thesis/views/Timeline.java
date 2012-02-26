@@ -15,8 +15,8 @@ import thesis.data.TestResult;
 public class Timeline extends ViewPart{
 	public static final String ID = "testview.views.SampleView";
 	private static ArrayList<TestResult> testData,selectedList,nonSelectedList;
-	private static Canvas canvas;
-	private static GC gc;
+	private static Canvas canvasSelected,canvasUnselected;
+	private static GC gcSelected,gcUnselected;
 	private static Composite selectionAndPoolHolder;
 	private static Group selectionHolder;
 	private static Group poolHolder;
@@ -25,7 +25,8 @@ public class Timeline extends ViewPart{
 	
 	private static ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
 	
-	private static TimelinePainterSelectedTests tlPainter;
+	private static TimelinePainterSelectedTests tlPainterSelected;
+	private static TimelinePainterTestPool tlPainterUnSelected;
 	
 	
 	public static void update(ArrayList<TestResult> tests){
@@ -44,27 +45,34 @@ public class Timeline extends ViewPart{
 		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
 		selectionHolder.setText("Selected Tests");
 		selectionHolder.setLayout(new FillLayout());
+		canvasSelected=new Canvas(selectionHolder,SWT.NONE);
+		gcSelected=new GC(canvasSelected);
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
 		poolHolder.setLayout(new FillLayout());
-		canvas=new Canvas(selectionHolder,SWT.NONE);
-//		canvas.setBounds(selectionHolder.getBounds());
-		gc=new GC(canvas);
+		canvasUnselected=new Canvas(poolHolder, SWT.NONE);
+		gcUnselected=new GC(canvasUnselected);
+		
 		testData=new ArrayList<TestResult>();
 		selectedList=new ArrayList<TestResult>();
 		nonSelectedList=new ArrayList<TestResult>();
-		tlPainter=new TimelinePainterSelectedTests(canvas,selectedList);
-		canvas.addPaintListener(tlPainter);
+		
+		tlPainterSelected=new TimelinePainterSelectedTests(canvasSelected,selectedList);
+		canvasSelected.addPaintListener(tlPainterSelected);
+		
+		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, selectedList);
+		canvasUnselected.addPaintListener(tlPainterUnSelected);
 	}
 
 	private static void updateGraphics(){
-		tlPainter.drawGraphics(gc);
+		tlPainterSelected.drawGraphics(gcSelected);
+		tlPainterUnSelected.drawGraphics(gcUnselected);
 	}
 	
 	public void setFocus() {
 		selectionHolder.setFocus();
 		poolHolder.setFocus();
-		canvas.setFocus();
+//		canvasSelected.setFocus();
 	}
 	
 	
@@ -83,7 +91,8 @@ public class Timeline extends ViewPart{
 		}
 		
 		selectedList.add(testToAdd);
-		tlPainter.update(selectedList);
+		tlPainterSelected.update(selectedList);
+		tlPainterUnSelected.update(selectedList);
 	}
 	
 	private void removeTestFromSet(TestResult testToRemove){
