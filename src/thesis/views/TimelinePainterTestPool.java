@@ -61,9 +61,24 @@ public class TimelinePainterTestPool implements PaintListener{
 		newly_detected_mutants.addAll(test.getDetectedMutants());
 		ArrayList<TestResult> selectedList=Timeline.selectedList;
 		
+		kills=(int)(height_ratio*test.getDetectedMutants().size());
+		
+		int selectedPosition=Activator.SelectedTest;
 		//loop through the selected list and remove any mutants for this test
-		//That have already been detected
-		for(int i=0;i<selectedList.size();i++){
+		//That have already been detected, up to the selected position
+		for(int i=0;i<selectedPosition;i++){
+			System.out.println(i);
+			for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
+				if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
+					newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
+				}
+			}
+		}
+		killsUnique=(int)(height_ratio*newly_detected_mutants.size());
+		
+		//find true uniqueness by removing uniqueness after the selected position
+		for(int i=selectedPosition;i<selectedList.size();i++){
+			System.out.println(i);
 			for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
 				if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
 					newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
@@ -71,10 +86,7 @@ public class TimelinePainterTestPool implements PaintListener{
 			}
 		}
 		
-		//Calculate the data if this test was added to the end of the list
-		kills=(int)(height_ratio*test.getDetectedMutants().size());
-		killsUnique=0;//By definition this will not exist if we are only placing on the end
-		killsTrueUnique=newly_detected_mutants.size();
+		killsTrueUnique=(int)(height_ratio*newly_detected_mutants.size());
 
 		//Draw non unique kills
 		gc.setBackground(kNonUnique);
@@ -83,8 +95,8 @@ public class TimelinePainterTestPool implements PaintListener{
 		//Draw unique kills
 		//Because I am only placing on the end of the list, unique is equivalent
 		//to true unique and thus unique will not be shown
-//		gc.setBackground(kUnique);
-//		gc.fillRectangle(startx, total_height-kills, width, killsUnique);
+		gc.setBackground(kUnique);
+		gc.fillRectangle(startx, total_height-killsUnique, width, killsUnique);
 		
 		//Draw True Unique kills
 		gc.setBackground(kTrueUnique);

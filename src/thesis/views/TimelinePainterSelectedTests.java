@@ -50,14 +50,15 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		for(int i=0;i<selectedList.size();i++){
 			TestResult test=selectedList.get(i);
 			int width=(int)(test.getTime()*width_ratio);
-			drawTestResult(gc,test,current_x, width);
+			boolean selected=(i==Activator.SelectedTest);
+			drawTestResult(gc,test,current_x, width,selected);
 			current_x+=width;
 		}
 	}
 	
 	public void update(ArrayList<TestResult> list){selectedList=list;}
 	
-	private static void drawTestResult(GC gc,TestResult test,int startx,int width){
+	private static void drawTestResult(GC gc,TestResult test,int startx,int width,boolean selected){
 		int total_height=canvas.getClientArea().height;
 		double height_ratio=(double)total_height/(double)kMax_kills;
 		
@@ -79,7 +80,10 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		gc.fillRectangle(startx, total_height-kills, width, kills);
 		
 		//Draw outline of test
-		gc.setForeground(kOutline);
+		if(!selected)
+			gc.setForeground(kOutline);
+		else
+			gc.setForeground(kNonSelectedTrueUnique);
 		kills=(int)(height_ratio*test.getDetectedMutants().size());
 		gc.drawRectangle(startx, total_height-kills, width, kills);
 	}
