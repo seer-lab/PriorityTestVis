@@ -36,6 +36,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			Random rand=new Random();
 			
 			//Generate test data
+			int mutants_created=Activator.mutantList.size();
 			for(int x=0;x<157;x++){
 				long time=rand.nextInt(300);
 				time+=50;
@@ -43,7 +44,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				int number_killed=rand.nextInt(150)+50;
 				ArrayList<Integer> detected_mutants=new ArrayList<Integer>();
 				for(int n=0;n<number_killed;n++){
-					detected_mutants.add(rand.nextInt(3500));
+					detected_mutants.add(rand.nextInt(mutants_created));
 				}
 				TestResult e=new TestResult(x,time,detected_mutants);
 				Activator.getDefault().testList.add(e);

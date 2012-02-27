@@ -10,10 +10,12 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
+import thesis.Activator;
+import thesis.data.Mutant;
 import thesis.data.TestResult;
 
 public class TimelinePainterTestPool implements PaintListener{
-	private final static int kTotal_time=10000;
+	private final static int kTotal_time=Activator.TimeGoal;
 	private final static int kMax_kills=200;
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kEclipseBackground=new Color(null,220,220,220);
@@ -21,11 +23,6 @@ public class TimelinePainterTestPool implements PaintListener{
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
 	private static final Color kNonUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
 	private final static Color kTrueUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
-	
-	
-	private final static Color kNonSelectedNonUnique=Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
-	private final static Color kNonSelectedUnique=Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-	private final static Color kNonSelectedTrueUnique=Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
 	
 	private static Canvas canvas;
 	private static ArrayList<TestResult> unselectedList;
@@ -59,26 +56,42 @@ public class TimelinePainterTestPool implements PaintListener{
 		int total_height=canvas.getClientArea().height;
 		double height_ratio=(double)total_height/(double)kMax_kills;
 		
-		int kills;
+		int kills,killsUnique,killsTrueUnique;
+		ArrayList<Integer> newly_detected_mutants=new ArrayList<Integer>();
+		newly_detected_mutants.addAll(test.getDetectedMutants());
+		ArrayList<TestResult> selectedList=Timeline.selectedList;
+		
+		//loop through the selected list and remove any mutants for this test
+		//That have already been detected
+		for(int i=0;i<selectedList.size();i++){
+			for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
+				if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
+					newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
+				}
+			}
+		}
+		
+		//Calculate the data if this test was added to the end of the list
+		kills=(int)(height_ratio*test.getDetectedMutants().size());
+		killsUnique=0;//By definition this will not exist if we are only placing on the end
+		killsTrueUnique=newly_detected_mutants.size();
 
 		//Draw non unique kills
 		gc.setBackground(kNonUnique);
-		kills=(int)(height_ratio*test.getDetectedMutants().size());
 		gc.fillRectangle(startx, total_height-kills, width, kills);
 		
 		//Draw unique kills
-		gc.setBackground(kUnique);
-		kills=(int)(height_ratio*test.getUniqueMutants().size());
-		gc.fillRectangle(startx, total_height-kills, width, kills);
+		//Because I am only placing on the end of the list, unique is equivalent
+		//to true unique and thus unique will not be shown
+//		gc.setBackground(kUnique);
+//		gc.fillRectangle(startx, total_height-kills, width, killsUnique);
 		
 		//Draw True Unique kills
 		gc.setBackground(kTrueUnique);
-		kills=(int)(height_ratio*test.getTrueUniqueMutants().size());
-		gc.fillRectangle(startx, total_height-kills, width, kills);
+		gc.fillRectangle(startx, total_height-killsTrueUnique, width, killsTrueUnique);
 		
 		//Draw outline of test
 		gc.setForeground(kOutline);
-		kills=(int)(height_ratio*test.getDetectedMutants().size());
 		gc.drawRectangle(startx, total_height-kills, width, kills);
 	}
 

@@ -22,6 +22,7 @@ public class Activator extends AbstractUIPlugin {
 	
 	public static ArrayList<Mutant> mutantList;
 	public static ArrayList<TestResult> testList;
+	public static int TimeGoal=10000;
 	
 	/**
 	 * The constructor

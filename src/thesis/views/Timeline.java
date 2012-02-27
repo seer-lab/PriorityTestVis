@@ -8,20 +8,20 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.ui.part.ViewPart;
 
+import thesis.Activator;
 import thesis.data.TestResult;
 
 public class Timeline extends ViewPart{
 	public static final String ID = "testview.views.SampleView";
-	private static ArrayList<TestResult> testData,selectedList,nonSelectedList;
+	public static ArrayList<TestResult> testData,selectedList,nonSelectedList;
 	private static Canvas canvasSelected,canvasUnselected;
 	private static GC gcSelected,gcUnselected;
-	private static Composite selectionAndPoolHolder;
 	private static Group selectionHolder;
 	private static Group poolHolder;
-	private final static int kTotal_time=10000;
-	private final static int kMax_kills=200;
+	private final static int kTotal_time=Activator.TimeGoal;
 	
 	private static ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
 	
@@ -45,12 +45,13 @@ public class Timeline extends ViewPart{
 		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
 		selectionHolder.setText("Selected Tests");
 		selectionHolder.setLayout(new FillLayout());
-		canvasSelected=new Canvas(selectionHolder,SWT.NONE);
+		canvasSelected=new Canvas(selectionHolder,SWT.NONE|SWT.H_SCROLL);
 		gcSelected=new GC(canvasSelected);
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
 		poolHolder.setLayout(new FillLayout());
-		canvasUnselected=new Canvas(poolHolder, SWT.NONE);
+		canvasUnselected=new Canvas(poolHolder, SWT.NONE|SWT.H_SCROLL);
+//		final ScrollBar hBarUnSelected=canvasUnselected.getHorizontalBar();
 		gcUnselected=new GC(canvasUnselected);
 		
 		testData=new ArrayList<TestResult>();
@@ -72,7 +73,6 @@ public class Timeline extends ViewPart{
 	public void setFocus() {
 		selectionHolder.setFocus();
 		poolHolder.setFocus();
-//		canvasSelected.setFocus();
 	}
 	
 	

@@ -10,10 +10,11 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
+import thesis.Activator;
 import thesis.data.TestResult;
 
 public class TimelinePainterSelectedTests implements PaintListener {
-	private final static int kTotal_time=10000;
+	private final static int kTotal_time=Activator.TimeGoal;
 	private final static int kMax_kills=200;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
