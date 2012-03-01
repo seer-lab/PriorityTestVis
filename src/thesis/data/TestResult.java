@@ -34,6 +34,19 @@ public class TestResult {
 //		
 //	}
 	
+	public int similarNumberOfTests(TestResult t){
+		ArrayList<Integer> mutants=new ArrayList<Integer>();
+//		int similarity=mutants.size();
+		mutants.addAll(t.detectedMutants);
+		mutants.removeAll(detectedMutants);
+		
+//		similarity-=mutants.size();
+		
+//		return similarity;
+//		return mutants.size();
+		return t.detectedMutants.size()-mutants.size();
+	}
+	
 	
 	public TestResult(int id,double t,ArrayList<Integer> detected){
 		detectedMutants=new ArrayList<Integer>();

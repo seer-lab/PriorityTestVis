@@ -67,7 +67,6 @@ public class TimelinePainterTestPool implements PaintListener{
 		//loop through the selected list and remove any mutants for this test
 		//That have already been detected, up to the selected position
 		for(int i=0;i<selectedPosition;i++){
-			System.out.println(i);
 			for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
 				if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
 					newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
@@ -78,7 +77,6 @@ public class TimelinePainterTestPool implements PaintListener{
 		
 		//find true uniqueness by removing uniqueness after the selected position
 		for(int i=selectedPosition;i<selectedList.size();i++){
-			System.out.println(i);
 			for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
 				if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
 					newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
