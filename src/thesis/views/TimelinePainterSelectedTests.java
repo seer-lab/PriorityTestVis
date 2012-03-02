@@ -19,7 +19,6 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kSelected=new Color(null,220,220,70);
-	private final static Color kEclipseBackground=new Color(null,220,220,220);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
 	private static final Color kNonUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
