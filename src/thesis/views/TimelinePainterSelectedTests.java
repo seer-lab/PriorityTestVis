@@ -25,9 +25,10 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private static final Color kNonUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
 	private final static Color kTrueUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
 	
+	private final static Color kSpecialUnique=new Color(null, 104, 118, 185);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
+	private static final Color kSpecialNonUnique=new Color(null, 55, 60, 129);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+	private final static Color kSpecialTrueUnique=new Color(null, 199, 176, 255);
 	
-	private final static Color kNonSelectedNonUnique=Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
-	private final static Color kSimilar=Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private final static Color kNonSelectedTrueUnique=Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
 	
 	private static Canvas canvas;
@@ -79,17 +80,26 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		int kills,killsUnique,killsTrueUnique;
 
 		//Draw non unique kills
-		gc.setBackground(kNonUnique);
+		if(!selected)
+			gc.setBackground(kNonUnique);
+		else
+			gc.setBackground(kSpecialNonUnique);
 		kills=(int)(height_ratio*test.getDetectedMutants().size());
 		gc.fillRectangle(startx, total_height-kills, width, kills);
 		
 		//Draw unique kills
-		gc.setBackground(kUnique);
+		if(!selected)
+			gc.setBackground(kUnique);
+		else
+			gc.setBackground(kSpecialUnique);
 		killsUnique=(int)(height_ratio*test.getUniqueMutants().size());
 		gc.fillRectangle(startx, total_height-killsUnique, width, killsUnique);
 		
 		//Draw True Unique kills
-		gc.setBackground(kTrueUnique);
+		if(!selected)
+			gc.setBackground(kTrueUnique);
+		else
+			gc.setBackground(kSpecialTrueUnique);
 		killsTrueUnique=(int)(height_ratio*test.getTrueUniqueMutants().size());
 		gc.fillRectangle(startx, total_height-killsTrueUnique, width, killsTrueUnique);
 		
