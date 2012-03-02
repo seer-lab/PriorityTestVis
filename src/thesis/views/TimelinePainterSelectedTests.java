@@ -18,6 +18,7 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private final static int kMax_kills=200;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+	private final static Color kSelected=new Color(null,220,220,70);
 	private final static Color kEclipseBackground=new Color(null,220,220,220);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
@@ -47,13 +48,26 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		double width_ratio=(double)total_width/kTotal_time;
 		
 		//Draw the Selected Tests
+		int runningTotal=0;
 		for(int i=0;i<selectedList.size();i++){
 			TestResult test=selectedList.get(i);
 			int width=(int)(test.getTime()*width_ratio);
+			
 			boolean selected=(i==Activator.SelectedTest);
+			if(i<Activator.SelectedTest)
+				runningTotal+=width;
 			drawTestResult(gc,test,current_x, width,selected,i);
 			current_x+=width;
 		}
+		
+		//Draw outline on the test that is moused over
+		if(selectedList.size()>0){
+			TestResult selectedTest=selectedList.get(Activator.SelectedTest);
+			gc.setForeground(kSelected);
+			int kills=(int)((double)canvas.getClientArea().height/(double)kMax_kills*selectedTest.getDetectedMutants().size());
+			gc.drawRectangle(runningTotal, canvas.getClientArea().height-kills, (int)(selectedTest.getTime()*width_ratio), kills);
+		}
+		
 	}
 	
 	public void update(ArrayList<TestResult> list){selectedList=list;}
