@@ -1,26 +1,38 @@
 package thesis.views;
 
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.events.MouseListener;
 
 import thesis.Activator;
 
-public class TimelineMouseSelector implements MouseMoveListener{
-	public TimelineMouseSelector(){
-		super();
-	}
+public class TimelineMouseClicker implements MouseListener{
+	public TimelineMouseClicker(){super();}
+
 	@Override
-	public void mouseMove(MouseEvent e) {
+	public void mouseDoubleClick(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		int x_location=e.x;
+		int y_location=e.y;
+		int lookingAt=findCurrentlySelected(x_location,y_location);
+		if(Activator.SelectedTest!=lookingAt){
+			Activator.SelectedTest=lookingAt;
+			Timeline.update();
+			
+		}
+	}
+
+	@Override
+	public void mouseUp(MouseEvent e) {
 //		int x_location=e.x;
 //		int y_location=e.y;
-//		int lookingAt=findCurrentlySelected(x_location,y_location);
-//		if(Activator.SelectedTest!=lookingAt){
-//			Activator.SelectedTest=lookingAt;
-//			Timeline.update();
-//			
-//		}
+		
 	}
+	
 	private int findCurrentlySelected(int x, int y){
 		//TODO for now I'm not going to use y coordinates
 		//I'm just going to match the x value with the matching test

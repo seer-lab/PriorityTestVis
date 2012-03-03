@@ -28,6 +28,7 @@ public class Timeline extends ViewPart{
 	private static TimelinePainterSelectedTests tlPainterSelected;
 	private static TimelinePainterTestPool tlPainterUnSelected;
 	private static TimelineMouseSelector tlMouseSelector;
+	private static TimelineMouseClicker tlMouseClicker;
 	
 	
 	public static void update(ArrayList<TestResult> tests){
@@ -67,6 +68,9 @@ public class Timeline extends ViewPart{
 		canvasSelected.addPaintListener(tlPainterSelected);
 		tlMouseSelector=new TimelineMouseSelector();
 		canvasSelected.addMouseMoveListener(tlMouseSelector);
+		
+		tlMouseClicker=new TimelineMouseClicker();
+		canvasSelected.addMouseListener(tlMouseClicker);
 		
 		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, nonSelectedList);
 		canvasUnselected.addPaintListener(tlPainterUnSelected);
