@@ -21,12 +21,12 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private final static Color kSelected=new Color(null,220,220,70);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
-	private static final Color kNonUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
-	private final static Color kTrueUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
+	private static final Color kNonUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+	private final static Color kTrueUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
 	
 	private final static Color kSpecialUnique=new Color(null, 104, 118, 185);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
-	private static final Color kSpecialNonUnique=new Color(null, 55, 60, 129);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
-	private final static Color kSpecialTrueUnique=new Color(null, 199, 176, 255);
+	private static final Color kSpecialNonUnique=new Color(null, 199, 176, 255);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+	private final static Color kSpecialTrueUnique=new Color(null, 55, 60, 129);
 	
 	private final static Color kNonSelectedTrueUnique=Display.getCurrent().getSystemColor(SWT.COLOR_MAGENTA);
 	

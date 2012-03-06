@@ -21,8 +21,8 @@ public class TimelinePainterTestPool implements PaintListener{
 	private final static Color kEclipseBackground=new Color(null,220,220,220);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
-	private static final Color kNonUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
-	private final static Color kTrueUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
+	private static final Color kNonUnique=new Color(null, 169, 126, 225);//Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+	private final static Color kTrueUnique=new Color(null, 25, 30, 99);//Display.getCurrent().getSystemColor(SWT.COLOR_CYAN);
 	
 	private static Canvas canvas;
 	private static ArrayList<TestResult> unselectedList;
