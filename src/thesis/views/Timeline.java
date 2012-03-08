@@ -8,7 +8,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.ui.part.ViewPart;
 
 import thesis.Activator;
@@ -27,7 +26,7 @@ public class Timeline extends ViewPart{
 	
 	private static TimelinePainterSelectedTests tlPainterSelected;
 	private static TimelinePainterTestPool tlPainterUnSelected;
-	private static TimelineMouseSelector tlMouseSelector;
+	private static TimelineMouseHover tlMouseSelector;
 	private static TimelineMouseClicker tlMouseClicker;
 	
 	
@@ -66,8 +65,9 @@ public class Timeline extends ViewPart{
 		
 		tlPainterSelected=new TimelinePainterSelectedTests(canvasSelected,selectedList);
 		canvasSelected.addPaintListener(tlPainterSelected);
-		tlMouseSelector=new TimelineMouseSelector();
+		tlMouseSelector=new TimelineMouseHover(selectedList);
 		canvasSelected.addMouseMoveListener(tlMouseSelector);
+//		System.out.println(parent.toString()+" "+parent.getBounds().width+":"+parent.getBounds().height);
 		
 		tlMouseClicker=new TimelineMouseClicker();
 		canvasSelected.addMouseListener(tlMouseClicker);
@@ -75,6 +75,7 @@ public class Timeline extends ViewPart{
 		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, nonSelectedList);
 		canvasUnselected.addPaintListener(tlPainterUnSelected);
 	}
+	
 
 	private static void updateGraphics(){
 		tlPainterSelected.drawGraphics(gcSelected);
@@ -104,6 +105,7 @@ public class Timeline extends ViewPart{
 		selectedList.add(testToAdd);
 		tlPainterSelected.update(selectedList);
 		tlPainterUnSelected.update(nonSelectedList);
+		tlMouseSelector.update(selectedList);
 	}
 	
 	private void removeTestFromSet(TestResult testToRemove){
