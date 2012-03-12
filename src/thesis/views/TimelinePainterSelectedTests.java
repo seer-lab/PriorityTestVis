@@ -18,6 +18,8 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private final static int kMax_kills=200;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+	private final static Color kEclipse=new Color(null,237,236,235);
+	private final static Color kToolTip=new Color(null,232,242,250);
 	private final static Color kSelected=new Color(null,220,220,70);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
@@ -42,13 +44,14 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		int current_x=0;
 		int total_width=canvas.getClientArea().width;
 		
-//		gc.setBackground(kEclipseBackground);
-//		gc.drawRectangle(0,0,total_width,canvas.getClientArea().height);
+		gc.setBackground(kEclipse);
+		gc.fillRectangle(canvas.getClientArea());
 		
 		double width_ratio=(double)total_width/kTotal_time;
 		
 		//Draw the Selected Tests
 		int runningTotal=0;
+		int hoverTotal=0;
 		for(int i=0;i<selectedList.size();i++){
 			TestResult test=selectedList.get(i);
 			int width=(int)(test.getTime()*width_ratio);
@@ -56,6 +59,8 @@ public class TimelinePainterSelectedTests implements PaintListener {
 			boolean selected=(i==Activator.SelectedTest);
 			if(i<Activator.SelectedTest)
 				runningTotal+=width;
+			if(i<=Activator.HoverTest)
+				hoverTotal+=width;
 			drawTestResult(gc,test,current_x, width,selected,i);
 			current_x+=width;
 		}
@@ -68,6 +73,16 @@ public class TimelinePainterSelectedTests implements PaintListener {
 			gc.drawRectangle(runningTotal, canvas.getClientArea().height-kills, (int)(selectedTest.getTime()*width_ratio), kills);
 		}
 		
+		//Draw tooltip of Test hovered over
+		if(Activator.HoverTest>=0&&!Activator.poolTooltip){
+			gc.setForeground(kOutline);
+			gc.setBackground(kToolTip);
+			TestResult selectedTest=selectedList.get(Activator.HoverTest);
+			gc.drawText(selectedTest.getDetectedMutants().size()+" Mutants Detected\n"
+					+selectedTest.getUniqueMutants().size()+" Newly Detected Mutants\n"
+					+selectedTest.getTrueUniqueMutants().size()+" Uniquely Detected Mutants"
+					,hoverTotal, canvas.getClientArea().height/2);
+		}
 	}
 	
 	public void update(ArrayList<TestResult> list){selectedList=list;}

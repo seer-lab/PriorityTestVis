@@ -26,7 +26,8 @@ public class Timeline extends ViewPart{
 	
 	private static TimelinePainterSelectedTests tlPainterSelected;
 	private static TimelinePainterTestPool tlPainterUnSelected;
-	private static TimelineMouseHover tlMouseSelector;
+	private static TimelineMouseHover tlMouseHoverSelected;
+	private static TimelineMouseHover tlMouseHoverPool;
 	private static TimelineMouseClicker tlMouseClicker;
 	
 	
@@ -65,8 +66,11 @@ public class Timeline extends ViewPart{
 		
 		tlPainterSelected=new TimelinePainterSelectedTests(canvasSelected,selectedList);
 		canvasSelected.addPaintListener(tlPainterSelected);
-		tlMouseSelector=new TimelineMouseHover(selectedList);
-		canvasSelected.addMouseMoveListener(tlMouseSelector);
+		tlMouseHoverSelected=new TimelineMouseHover(selectedList,false);
+		canvasSelected.addMouseMoveListener(tlMouseHoverSelected);
+		
+		tlMouseHoverPool=new TimelineMouseHover(nonSelectedList,true);
+		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
 //		System.out.println(parent.toString()+" "+parent.getBounds().width+":"+parent.getBounds().height);
 		
 		tlMouseClicker=new TimelineMouseClicker();
@@ -105,7 +109,8 @@ public class Timeline extends ViewPart{
 		selectedList.add(testToAdd);
 		tlPainterSelected.update(selectedList);
 		tlPainterUnSelected.update(nonSelectedList);
-		tlMouseSelector.update(selectedList);
+		tlMouseHoverSelected.update(selectedList);
+		tlMouseHoverPool.update(nonSelectedList);
 	}
 	
 	private void removeTestFromSet(TestResult testToRemove){

@@ -4,19 +4,21 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.widgets.Display;
 
 import thesis.Activator;
 import thesis.data.TestResult;
 
 public class TimelineMouseHover implements MouseMoveListener{
-	private final long HOVER_THIS_LONG=5000;
+	private final long HOVER_THIS_LONG=3000;
 	private static long hoverTime=0;
 	private int previously_looking_at=-1;//The test we were looking at after the last mouse event
 	private ArrayList<TestResult> testData;
-	public TimelineMouseHover(ArrayList<TestResult> tests){
+	private static boolean toolTipDrawn=false;
+	private boolean isThisTheTestPool;
+	public TimelineMouseHover(ArrayList<TestResult> tests,boolean isPool){
 		super();
 		this.update(tests);
+		isThisTheTestPool=isPool;
 	}
 	
 	public void update(ArrayList<TestResult> tests){
@@ -26,10 +28,14 @@ public class TimelineMouseHover implements MouseMoveListener{
 	public void mouseMove(MouseEvent e) {
 		int lookingAt=findCurrentlySelected(e.x,e.y);
 		if(lookingAt!=previously_looking_at){
+			Activator.HoverTest=Integer.MIN_VALUE;
+			Activator.poolTooltip=isThisTheTestPool;
 			hoverTime=System.currentTimeMillis();
 			previously_looking_at=lookingAt;
-		}else if(System.currentTimeMillis()-hoverTime>=HOVER_THIS_LONG){
+			toolTipDrawn=false;
+		}else if(System.currentTimeMillis()-hoverTime>=HOVER_THIS_LONG&&!toolTipDrawn){
 			drawTheToolTip(e.x, e.y);
+			toolTipDrawn=true;
 		}
 //		if(Activator.SelectedTest!=lookingAt){
 //			Activator.SelectedTest=lookingAt;
@@ -52,6 +58,8 @@ public class TimelineMouseHover implements MouseMoveListener{
 	
 	private void drawTheToolTip(int x,int y){
 		System.out.println("Hovered on "+previously_looking_at);
+		Activator.HoverTest=previously_looking_at;
+		Timeline.update();
 	}
 
 }
