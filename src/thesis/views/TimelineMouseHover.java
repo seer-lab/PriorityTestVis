@@ -9,7 +9,7 @@ import thesis.Activator;
 import thesis.data.TestResult;
 
 public class TimelineMouseHover implements MouseMoveListener{
-	private final long HOVER_THIS_LONG=3000;
+	private final long HOVER_THIS_LONG=2000;
 	private static long hoverTime=0;
 	private int previously_looking_at=-1;//The test we were looking at after the last mouse event
 	private ArrayList<TestResult> testData;

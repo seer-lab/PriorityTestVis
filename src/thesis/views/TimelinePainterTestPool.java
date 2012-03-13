@@ -27,6 +27,9 @@ public class TimelinePainterTestPool implements PaintListener{
 	
 	private static Canvas canvas;
 	private static ArrayList<TestResult> unselectedList;
+	
+	private static int hoverUniqueKills=0;
+	private static int hoverTrueUniqueKills=0;
 
 	public TimelinePainterTestPool(Canvas c,ArrayList<TestResult> list){canvas=c;unselectedList=list;}
 	
@@ -47,7 +50,7 @@ public class TimelinePainterTestPool implements PaintListener{
 		for(int i=0;i<unselectedList.size();i++){
 			TestResult test=unselectedList.get(i);
 			int width=(int)(test.getTime()*width_ratio);
-			drawTestResult(gc,test,current_x, width);
+			drawTestResult(gc,test,current_x, width,(i==Activator.HoverTest&&Activator.poolTooltip));
 			current_x+=width;
 			if(i<=Activator.HoverTest)
 				hoverTotal+=width;
@@ -59,15 +62,16 @@ public class TimelinePainterTestPool implements PaintListener{
 			gc.setBackground(kToolTip);
 			TestResult selectedTest=unselectedList.get(Activator.HoverTest);
 			gc.drawText(selectedTest.getDetectedMutants().size()+" Mutants Detected\n"
-					+selectedTest.getUniqueMutants().size()+" Newly Detected Mutants\n"
-					+selectedTest.getTrueUniqueMutants().size()+" Uniquely Detected Mutants"
+					+hoverUniqueKills+" Newly Detected Mutants\n"
+					+hoverTrueUniqueKills+" Uniquely Detected Mutants\n"
+					+selectedTest.getTime()/1000.0+" Seconds\n"
 					,hoverTotal, canvas.getClientArea().height/2);
 		}
 	}
 	
 	public void update(ArrayList<TestResult> list){unselectedList=list;}
 	
-	private static void drawTestResult(GC gc,TestResult test,int startx,int width){
+	private static void drawTestResult(GC gc,TestResult test,int startx,int width,boolean hover){
 		int total_height=canvas.getClientArea().height;
 		double height_ratio=(double)total_height/(double)kMax_kills;
 		
@@ -89,6 +93,8 @@ public class TimelinePainterTestPool implements PaintListener{
 			}
 		}
 		killsUnique=(int)(height_ratio*newly_detected_mutants.size());
+		if(hover)
+			hoverUniqueKills=newly_detected_mutants.size();
 		
 		//find true uniqueness by removing uniqueness after the selected position
 		for(int i=selectedPosition;i<selectedList.size();i++){
@@ -100,6 +106,8 @@ public class TimelinePainterTestPool implements PaintListener{
 		}
 		
 		killsTrueUnique=(int)(height_ratio*newly_detected_mutants.size());
+		if(hover)
+			hoverTrueUniqueKills=newly_detected_mutants.size();
 
 		//Draw non unique kills
 		gc.setBackground(kNonUnique);
@@ -118,6 +126,9 @@ public class TimelinePainterTestPool implements PaintListener{
 		//Draw outline of test
 		gc.setForeground(kOutline);
 		gc.drawRectangle(startx, total_height-kills, width, kills);
+		
+
 	}
+
 
 }

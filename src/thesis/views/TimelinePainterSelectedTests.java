@@ -80,7 +80,8 @@ public class TimelinePainterSelectedTests implements PaintListener {
 			TestResult selectedTest=selectedList.get(Activator.HoverTest);
 			gc.drawText(selectedTest.getDetectedMutants().size()+" Mutants Detected\n"
 					+selectedTest.getUniqueMutants().size()+" Newly Detected Mutants\n"
-					+selectedTest.getTrueUniqueMutants().size()+" Uniquely Detected Mutants"
+					+selectedTest.getTrueUniqueMutants().size()+" Uniquely Detected Mutants\n"
+					+selectedTest.getTime()/1000.0+" Seconds\n"
 					,hoverTotal, canvas.getClientArea().height/2);
 		}
 	}
