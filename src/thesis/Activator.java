@@ -1,5 +1,10 @@
 package thesis;
 
+/**
+ * @author Ben Waters
+ * @version 1.0
+ * @since 2012-03-17
+ */
 import java.util.ArrayList;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -11,25 +16,36 @@ import thesis.data.TestResult;
 
 /**
  * The activator class controls the plug-in life cycle
+ * 
+ * This class is largely auto-generated, but static variables related to the
+ * entire plugin life have also been added in here
  */
 public class Activator extends AbstractUIPlugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "thesis"; //$NON-NLS-1$
+	/**The ID used for the plugin*/
+	public static final String PLUGIN_ID = "thesis";
 
-	// The shared instance
+	/**The shared instance*/
 	private static Activator plugin;
 	
+	/**The List of all mutants*/
 	public static ArrayList<Mutant> mutantList;
+	/**The Test Suite we are evaluating*/
 	public static ArrayList<TestResult> testList;
+	/**The time limit we have set for our test evaluation*/
 	public static int TimeGoal=10000;
 	
+	/**The test the user has selected*/
 	public static int SelectedTest=-1;
+	
+	/**The index of the test that is being hovered over*/
 	public static int HoverTest=-1;
+	
+	/**Is the hovered test in the pool or the selected area*/
 	public static boolean poolTooltip=false;
 	
 	/**
-	 * The constructor
+	 * The constructor initializes the static lists
 	 */
 	public Activator() {
 		mutantList=new ArrayList<Mutant>();

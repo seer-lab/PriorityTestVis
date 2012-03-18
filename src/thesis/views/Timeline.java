@@ -51,7 +51,7 @@ public class Timeline extends ViewPart{
 		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
 		selectionHolder.setText("Selected Tests");
 		selectionHolder.setLayout(new FillLayout());
-		canvasSelected=new Canvas(selectionHolder,SWT.NONE|SWT.H_SCROLL);
+		canvasSelected=new Canvas(selectionHolder,SWT.NONE);
 		gcSelected=new GC(canvasSelected);
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
