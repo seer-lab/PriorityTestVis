@@ -67,7 +67,10 @@ public class Timeline extends ViewPart{
 		tlPainterSelected.drawGraphics(gcSelected);
 	}
 	public static void cleanUpAfterToolTip(){
-		tlPainterSelected.drawAfterToolTip(gcSelected);
+		if(!Activator.poolTooltip)
+			tlPainterSelected.drawAfterToolTip(gcSelected);
+		else
+			tlPainterUnSelected.drawAfterToolTip(gcUnselected);
 	}
 	
 	@Override

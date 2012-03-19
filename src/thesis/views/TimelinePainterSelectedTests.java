@@ -36,9 +36,9 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	
 	public TimelinePainterSelectedTests(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
 	
-	/**Used to hold the starting xvalues of each of the tests*/
+	/**Used to hold the width so far of each of the tests*/
 	private static ArrayList<Integer> widthSoFar=new ArrayList<Integer>();
-	
+	/**Used to hold the starting xvalues of each of the tests*/
 	private static ArrayList<Integer> xStart=new ArrayList<Integer>();
 
 	@Override
