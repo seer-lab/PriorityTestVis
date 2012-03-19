@@ -14,23 +14,38 @@ import thesis.Activator;
 import thesis.data.TestResult;
 
 public class Timeline extends ViewPart{
+	
+	/**Identifies this view for eclipse*/
 	public static final String ID = "testview.views.SampleView";
-	public static ArrayList<TestResult> testData,selectedList,nonSelectedList;
+	
+	/**The list of all the Test data for the test suite*/
+	public static ArrayList<TestResult> testData;
+	/**The list of all tests which have been removed from the pool*/
+	public static ArrayList<TestResult> selectedList;
+	/**The list of all tests in the pool*/
+	public static ArrayList<TestResult> nonSelectedList;
+	
 	private static Canvas canvasSelected,canvasUnselected;
 	private static GC gcSelected,gcUnselected;
 	private static Group selectionHolder;
 	private static Group poolHolder;
-	private final static int kTotal_time=Activator.TimeGoal;
 	
 	private static ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
 	
+	/**Paints graphics for the selected tests*/
 	private static TimelinePainterSelectedTests tlPainterSelected;
+	/**Paints graphics for the test pool*/
 	private static TimelinePainterTestPool tlPainterUnSelected;
+	/**Used to listen for hover events on the selected tests*/
 	private static TimelineMouseHover tlMouseHoverSelected;
+	/**Used to listen for hover events on the test pool*/
 	private static TimelineMouseHover tlMouseHoverPool;
+	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
 	
-	
+	/**
+	 *  
+	 */
 	public static void update(ArrayList<TestResult> tests){
 		testData=tests;
 		nonSelectedList=testData;
@@ -39,6 +54,7 @@ public class Timeline extends ViewPart{
 		updateGraphics();
 	}
 	
+	/**If no tests are specified we only update the graphics*/
 	public static void update(){
 		updateGraphics();
 	}
@@ -57,7 +73,6 @@ public class Timeline extends ViewPart{
 		poolHolder.setText("Test Pool");
 		poolHolder.setLayout(new FillLayout());
 		canvasUnselected=new Canvas(poolHolder, SWT.NONE|SWT.H_SCROLL);
-//		final ScrollBar hBarUnSelected=canvasUnselected.getHorizontalBar();
 		gcUnselected=new GC(canvasUnselected);
 		
 		testData=new ArrayList<TestResult>();
@@ -71,7 +86,6 @@ public class Timeline extends ViewPart{
 		
 		tlMouseHoverPool=new TimelineMouseHover(nonSelectedList,true);
 		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
-//		System.out.println(parent.toString()+" "+parent.getBounds().width+":"+parent.getBounds().height);
 		
 		tlMouseClicker=new TimelineMouseClicker();
 		canvasSelected.addMouseListener(tlMouseClicker);
@@ -80,19 +94,20 @@ public class Timeline extends ViewPart{
 		canvasUnselected.addPaintListener(tlPainterUnSelected);
 	}
 	
-
+	/**Calls all required methods to update the graphics of the view*/
 	private static void updateGraphics(){
 		tlPainterSelected.drawGraphics(gcSelected);
 		tlPainterUnSelected.drawGraphics(gcUnselected);
 	}
 	
+	/**Sets focus for the timeline view*/
 	public void setFocus() {
 		selectionHolder.setFocus();
 		poolHolder.setFocus();
 	}
 	
 	
-	
+	/**This will add the test to the set, and remove it from the testpool*/
 	private static void addTestToSet(TestResult testToAdd){
 		nonSelectedList.remove(testToAdd);
 		
@@ -113,15 +128,19 @@ public class Timeline extends ViewPart{
 		tlMouseHoverPool.update(nonSelectedList);
 	}
 	
+	/**This does not work yet, its just a place holder*/
 	private void removeTestFromSet(TestResult testToRemove){
 		selectedList.remove(testToRemove);
 		nonSelectedList.add(testToRemove);
 	}
 	
+	/**This automatically selects tests to add in so I can see results before 
+	 * creating all the mouselisteners I will need for adding tests.
+	 */
 	private static void selectTestsToAddToSet(){
 		int currentTime=0;
 		if(nonSelectedList.size()>0){
-			while(currentTime<kTotal_time){
+			while(currentTime<Activator.TimeGoal){
 				if(nonSelectedList.size()==0){
 					break;
 				}else{
@@ -133,6 +152,7 @@ public class Timeline extends ViewPart{
 		tlPainterUnSelected.update(nonSelectedList);
 	}
 
+	/**Used so other classes can get the width from the canvas*/
 	public static int getUnselectedWidth(){
 		return Timeline.canvasUnselected.getClientArea().width;
 	}
