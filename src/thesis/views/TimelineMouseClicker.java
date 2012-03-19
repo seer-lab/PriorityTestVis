@@ -17,15 +17,18 @@ public class TimelineMouseClicker implements MouseListener{
 	@Override
 	public void mouseDown(MouseEvent e) {
 		System.out.println(e.button+" mouse button clicked");
+		int x_location=e.x;
+		int y_location=e.y;
 		if(e.button==1){
-			int x_location=e.x;
-			int y_location=e.y;
 			int lookingAt=findCurrentlySelected(x_location,y_location);
 			if(Activator.SelectedTest!=lookingAt){
 				Activator.SelectedTest=lookingAt;
 				Timeline.update();
 				
 			}
+		}else if(e.button==3){
+			int lookingAt=findCurrentlySelected(x_location,y_location);
+			Timeline.removeTestFromSet(lookingAt);
 		}
 	}
 

@@ -36,43 +36,39 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private static ArrayList<TestResult> selectedList;
 	
 	public TimelinePainterSelectedTests(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
+	
+	/**Used to hold the starting xvalues of each of the tests*/
+	private static ArrayList<Integer> widthSoFar=new ArrayList<Integer>();
+	
+	private static ArrayList<Integer> xStart=new ArrayList<Integer>();
 
 	@Override
 	public void paintControl(PaintEvent e) {drawGraphics(e.gc);}
 	
 	public void drawGraphics(GC gc){
-		int current_x=0;
-		int total_width=canvas.getClientArea().width;
 		
 		gc.setBackground(kEclipse);
 		gc.fillRectangle(canvas.getClientArea());
 		
-		double width_ratio=(double)total_width/kTotal_time;
 		
 		//Draw the Selected Tests
-		int runningTotal=0;
-		int hoverTotal=0;
 		for(int i=0;i<selectedList.size();i++){
 			TestResult test=selectedList.get(i);
-			int width=(int)(test.getTime()*width_ratio);
-			
-			boolean selected=(i==Activator.SelectedTest);
-			if(i<Activator.SelectedTest)
-				runningTotal+=width;
-			if(i<=Activator.HoverTest)
-				hoverTotal+=width;
-			drawTestResult(gc,test,current_x, width,selected,i);
-			current_x+=width;
+			drawTestResult(gc,test,i);
 		}
 		
-		//Draw outline on the test that is moused over
+		//Draw outline on the test that is selected
 		if(selectedList.size()>0){
 			TestResult selectedTest=selectedList.get(Activator.SelectedTest);
 			gc.setForeground(kNonSelectedTrueUnique);
 			int kills=(int)((double)canvas.getClientArea().height/(double)kMax_kills*selectedTest.getDetectedMutants().size());
-			gc.drawRectangle(runningTotal, canvas.getClientArea().height-kills, (int)(selectedTest.getTime()*width_ratio), kills);
+			gc.drawRectangle(xStart.get(Activator.SelectedTest), canvas.getClientArea().height-kills, widthSoFar.get(Activator.SelectedTest), kills);
 		}
 		
+		drawToolTip(gc);
+	}
+	
+	private void drawToolTip(GC gc){
 		//Draw tooltip of Test hovered over
 		if(Activator.HoverTest>=0&&!Activator.poolTooltip){
 			gc.setForeground(kOutline);
@@ -82,61 +78,74 @@ public class TimelinePainterSelectedTests implements PaintListener {
 					+selectedTest.getUniqueMutants().size()+" Newly Detected Mutants\n"
 					+selectedTest.getTrueUniqueMutants().size()+" Uniquely Detected Mutants\n"
 					+selectedTest.getTime()/1000.0+" Seconds\n"
-					,hoverTotal, canvas.getClientArea().height/2);
+					,xStart.get(Activator.HoverTest+1), canvas.getClientArea().height/2);
 		}
 	}
 	
-	public void update(ArrayList<TestResult> list){selectedList=list;}
+	private void drawAfterToolTip(GC gc){
+		gc.setBackground(kEclipse);
+		gc.fillRectangle(canvas.getClientArea());
+	}
 	
-	private static void drawTestResult(GC gc,TestResult test,int startx,int width,boolean selected,int index_of_this_test){
+	public void update(ArrayList<TestResult> list){
+		selectedList=list;
+		widthSoFar.clear();
+		xStart.clear();
+		double width_ratio=(double)canvas.getClientArea().width/kTotal_time;
+		int runningTotal=0;
+		for(int i=0;i<list.size();i++){
+			xStart.add(runningTotal);
+			runningTotal+=((int)(list.get(i).getTime()*width_ratio));
+			widthSoFar.add((int)(list.get(i).getTime()*width_ratio));
+		}
+	}
+	
+	private static void drawTestResult(GC gc,TestResult test,int index_of_this_test){
 		int total_height=canvas.getClientArea().height;
 		double height_ratio=(double)total_height/(double)kMax_kills;
 		
 		int kills,killsUnique,killsTrueUnique;
 
 		//Draw non unique kills
-		if(!selected)
+		if(!(index_of_this_test==Activator.SelectedTest))
 			gc.setBackground(kNonUnique);
 		else
 			gc.setBackground(kSpecialNonUnique);
 		kills=(int)(height_ratio*test.getDetectedMutants().size());
-		gc.fillRectangle(startx, total_height-kills, width, kills);
+		gc.fillRectangle(xStart.get(index_of_this_test), total_height-kills, widthSoFar.get(index_of_this_test), kills);
 		
 		//Draw unique kills
-		if(!selected)
+		if(!(index_of_this_test==Activator.SelectedTest))
 			gc.setBackground(kUnique);
 		else
 			gc.setBackground(kSpecialUnique);
 		killsUnique=(int)(height_ratio*test.getUniqueMutants().size());
-		gc.fillRectangle(startx, total_height-killsUnique, width, killsUnique);
+		gc.fillRectangle(xStart.get(index_of_this_test), total_height-killsUnique, widthSoFar.get(index_of_this_test), killsUnique);
 		
 		//Draw True Unique kills
-		if(!selected)
+		if(!(index_of_this_test==Activator.SelectedTest))
 			gc.setBackground(kTrueUnique);
 		else
 			gc.setBackground(kSpecialTrueUnique);
 		killsTrueUnique=(int)(height_ratio*test.getTrueUniqueMutants().size());
-		gc.fillRectangle(startx, total_height-killsTrueUnique, width, killsTrueUnique);
+		gc.fillRectangle(xStart.get(index_of_this_test), total_height-killsTrueUnique, widthSoFar.get(index_of_this_test), killsTrueUnique);
 		
 		
 		//Draw indicators for test relating to the selected test
-		if(!selected){
+		if(!(index_of_this_test==Activator.SelectedTest)){
 			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testData.get(Activator.SelectedTest)));
 			gc.setBackground(kNonSelectedTrueUnique);
 			if(index_of_this_test<Activator.SelectedTest){
-				gc.fillRectangle(startx,total_height-killsUnique,width,similarNumberOfTest);
+				gc.fillRectangle(xStart.get(index_of_this_test),total_height-killsUnique,widthSoFar.get(index_of_this_test),similarNumberOfTest);
 			}else{
-				gc.fillRectangle(startx,total_height-kills,width,similarNumberOfTest);
+				gc.fillRectangle(xStart.get(index_of_this_test),total_height-kills,widthSoFar.get(index_of_this_test),similarNumberOfTest);
 			}
 		}
 		
 		//Draw outline of test
-//		if(!selected)
-			gc.setForeground(kOutline);
-//		else
-//			gc.setForeground(kNonSelectedTrueUnique);
+		gc.setForeground(kOutline);
 		kills=(int)(height_ratio*test.getDetectedMutants().size());
-		gc.drawRectangle(startx, total_height-kills, width, kills);
+		gc.drawRectangle(xStart.get(index_of_this_test), total_height-kills, widthSoFar.get(index_of_this_test), kills);
 	}
 
 }

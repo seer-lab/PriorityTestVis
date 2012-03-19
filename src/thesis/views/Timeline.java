@@ -59,6 +59,14 @@ public class Timeline extends ViewPart{
 		updateGraphics();
 	}
 	
+	public static void drawPool(){
+		tlPainterUnSelected.drawGraphics(gcUnselected);
+	}
+	
+	public static void drawSelection(){
+		tlPainterSelected.drawGraphics(gcSelected);
+	}
+	
 	@Override
 	public void createPartControl(Composite parent) {
 		FillLayout fill=new FillLayout();
@@ -124,14 +132,16 @@ public class Timeline extends ViewPart{
 		selectedList.add(testToAdd);
 		tlPainterSelected.update(selectedList);
 		tlPainterUnSelected.update(nonSelectedList);
-		tlMouseHoverSelected.update(selectedList);
+		tlMouseHoverSelected.update(selectedList); 
 		tlMouseHoverPool.update(nonSelectedList);
 	}
 	
 	/**This does not work yet, its just a place holder*/
-	private void removeTestFromSet(TestResult testToRemove){
-		selectedList.remove(testToRemove);
-		nonSelectedList.add(testToRemove);
+	static void removeTestFromSet(int index){
+		TestResult testData=selectedList.get(index);
+		selectedList.remove(index);
+		//TODO All tests after the index need to update their lists of detection
+		updateGraphics();
 	}
 	
 	/**This automatically selects tests to add in so I can see results before 

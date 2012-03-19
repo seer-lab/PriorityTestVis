@@ -59,7 +59,10 @@ public class TimelineMouseHover implements MouseMoveListener{
 	private void drawTheToolTip(int x,int y){
 		System.out.println("Hovered on "+previously_looking_at);
 		Activator.HoverTest=previously_looking_at;
-		Timeline.update();
+		if(Activator.poolTooltip)
+			Timeline.drawPool();
+		else
+			Timeline.drawSelection();
 	}
 
 }
