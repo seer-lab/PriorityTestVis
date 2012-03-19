@@ -20,7 +20,6 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kEclipse=new Color(null,237,236,235);
 	private final static Color kToolTip=new Color(null,232,242,250);
-	private final static Color kSelected=new Color(null,220,220,70);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);//Display.getCurrent().getSystemColor( SWT.COLOR_BLUE);
 	private static final Color kNonUnique=new Color(null, 144, 179, 222);
@@ -82,9 +81,16 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		}
 	}
 	
-	private void drawAfterToolTip(GC gc){
-		gc.setBackground(kEclipse);
-		gc.fillRectangle(canvas.getClientArea());
+	public void drawAfterToolTip(GC gc){
+		if(Activator.HoverTest>-1&&Activator.HoverTest<selectedList.size()){
+			gc.setBackground(kEclipse);
+			gc.fillRectangle(xStart.get(Activator.HoverTest+1),0,
+					canvas.getClientArea().width-widthSoFar.get(Activator.HoverTest+1),canvas.getClientArea().height);
+			for(int i=Activator.HoverTest+1;i<selectedList.size();i++){
+				TestResult test=selectedList.get(i);
+				drawTestResult(gc,test,i);
+			}
+		}
 	}
 	
 	public void update(ArrayList<TestResult> list){
@@ -132,7 +138,7 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		
 		
 		//Draw indicators for test relating to the selected test
-		if(!(index_of_this_test==Activator.SelectedTest)){
+		if(!(index_of_this_test==Activator.SelectedTest)&&Activator.SelectedTest>-1){
 			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testData.get(Activator.SelectedTest)));
 			gc.setBackground(kNonSelectedTrueUnique);
 			if(index_of_this_test<Activator.SelectedTest){

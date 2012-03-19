@@ -66,6 +66,9 @@ public class Timeline extends ViewPart{
 	public static void drawSelection(){
 		tlPainterSelected.drawGraphics(gcSelected);
 	}
+	public static void cleanUpAfterToolTip(){
+		tlPainterSelected.drawAfterToolTip(gcSelected);
+	}
 	
 	@Override
 	public void createPartControl(Composite parent) {

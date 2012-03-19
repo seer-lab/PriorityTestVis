@@ -28,6 +28,8 @@ public class TimelineMouseHover implements MouseMoveListener{
 	public void mouseMove(MouseEvent e) {
 		int lookingAt=findCurrentlySelected(e.x,e.y);
 		if(lookingAt!=previously_looking_at){
+			Timeline.cleanUpAfterToolTip();
+			
 			Activator.HoverTest=Integer.MIN_VALUE;
 			Activator.poolTooltip=isThisTheTestPool;
 			hoverTime=System.currentTimeMillis();
@@ -37,10 +39,6 @@ public class TimelineMouseHover implements MouseMoveListener{
 			drawTheToolTip(e.x, e.y);
 			toolTipDrawn=true;
 		}
-//		if(Activator.SelectedTest!=lookingAt){
-//			Activator.SelectedTest=lookingAt;
-//			Timeline.update();
-//		}
 	}
 	private int findCurrentlySelected(int x, int y){
 		//TODO for now I'm not going to use y coordinates
