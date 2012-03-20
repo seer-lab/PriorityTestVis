@@ -40,7 +40,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			for(int x=0;x<157;x++){
 				long time=rand.nextInt(300);
 				time+=50;
-				try{Thread.sleep(time);}catch(InterruptedException e){};
+//				try{Thread.sleep(time);}catch(InterruptedException e){};
 				int number_killed=rand.nextInt(150)+50;
 				ArrayList<Integer> detected_mutants=new ArrayList<Integer>();
 				for(int n=0;n<number_killed;n++){

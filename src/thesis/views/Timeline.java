@@ -151,9 +151,14 @@ public class Timeline extends ViewPart{
 		nonSelectedList.remove(x);
 		
 		//Remove partial uniqueness
+		test.removeTrueUniqueness(previously_detected_mutants);
+		test.removeUniqueness(previously_detected_mutants);
+		previously_detected_mutants.addAll(test.getDetectedMutants());
 		
 		//Remove true uniqueness
-		
+		for(int i=0;i<selectedList.size();i++){
+			selectedList.get(i).removeTrueUniqueness(test.getDetectedMutants());
+		}
 		
 		selectedList.add(test);
 		
@@ -171,8 +176,32 @@ public class Timeline extends ViewPart{
 	
 	/**This does not work yet, its just a place holder*/
 	static void removeTestFromSet(int index){
+		TestResult test=selectedList.get(index);
 		selectedList.remove(index);
-		//TODO All tests after the index need to update their lists of detection
+		nonSelectedList.add(test);
+		
+		//Remove the true unique mutants from previously detected
+		previously_detected_mutants.removeAll(test.getTrueUniqueMutants());
+		
+		//Update the newly detected mutants to shift them to the later test that detects them
+		ArrayList<Integer> mutants_detected=test.getUniqueMutants();
+//		System.out.print(mutants_detected.size());
+		for(int q=index;q<selectedList.size();q++){
+			for(int i=0;i<mutants_detected.size();i++){
+				if(selectedList.get(q).getDetectedMutants().contains(mutants_detected.get(i))){
+					selectedList.get(q).getUniqueMutants().add(mutants_detected.get(i));
+					mutants_detected.remove(i);
+					i=0;
+					System.out.print("<"+q+":"+i+">");
+				}
+			}
+		}
+//		System.out.println(":"+mutants_detected.size()+":"+test.getTrueUniqueMutants().size());
+		
+		previously_detected_mutants.removeAll(mutants_detected);
+		
+		
+		updateListeners();
 		updateGraphics();
 	}
 	

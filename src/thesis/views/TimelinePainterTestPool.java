@@ -118,13 +118,14 @@ public class TimelinePainterTestPool implements PaintListener{
 		killsUnique=(int)(height_ratio*newly_detected_mutants.size());
 		
 		//find true uniqueness by removing uniqueness after the selected position
-		for(int i=selectedPosition;i<selectedList.size();i++){
-			for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
-				if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
-					newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
+		if(selectedPosition>=0)
+			for(int i=selectedPosition;i<selectedList.size();i++){
+				for(int j=0;j<selectedList.get(i).getDetectedMutants().size();j++){
+					if(newly_detected_mutants.contains(selectedList.get(i).getDetectedMutants().get(j))){
+						newly_detected_mutants.remove(selectedList.get(i).getDetectedMutants().get(j));
+					}
 				}
 			}
-		}
 		
 		killsTrueUnique=(int)(height_ratio*newly_detected_mutants.size());
 
