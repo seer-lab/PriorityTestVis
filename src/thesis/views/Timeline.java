@@ -159,9 +159,12 @@ public class Timeline extends ViewPart{
 		for(int i=0;i<selectedList.size();i++){
 			selectedList.get(i).removeTrueUniqueness(test.getDetectedMutants());
 		}
-		
-		selectedList.add(test);
-		
+		if(Activator.SelectedTest>=0){
+			selectedList.add(Activator.SelectedTest,test);
+			Activator.SelectedTest++;
+		}else{
+			selectedList.add(test);
+		}
 		updateListeners();
 		
 		updateGraphics();
