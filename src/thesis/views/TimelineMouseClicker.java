@@ -21,8 +21,11 @@ public class TimelineMouseClicker implements MouseListener{
 			int lookingAt=findCurrentlySelected(e.x,e.y);
 			if(Activator.SelectedTest!=lookingAt){
 				Activator.SelectedTest=lookingAt;
-				Timeline.drawSelection();
-				
+//				Timeline.drawSelection();
+				Timeline.update();
+			}else{
+				Activator.SelectedTest=-1;
+				Timeline.update();
 			}
 		}else if(e.button==3){
 			int lookingAt=findCurrentlySelected(e.x,e.y);
@@ -32,8 +35,7 @@ public class TimelineMouseClicker implements MouseListener{
 				Activator.SelectedTest=-1;
 			Timeline.removeTestFromSet(lookingAt);
 		}else if(e.button==2){
-			Activator.SelectedTest=-1;
-			Timeline.update();
+			
 		}
 	}
 
