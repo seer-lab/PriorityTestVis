@@ -17,27 +17,25 @@ public class TimelineMouseClicker implements MouseListener{
 	@Override
 	public void mouseDown(MouseEvent e) {
 		System.out.println(e.button+" mouse button clicked");
-		int x_location=e.x;
-		int y_location=e.y;
 		if(e.button==1){
-			int lookingAt=findCurrentlySelected(x_location,y_location);
+			int lookingAt=findCurrentlySelected(e.x,e.y);
 			if(Activator.SelectedTest!=lookingAt){
 				Activator.SelectedTest=lookingAt;
 				Timeline.update();
 				
 			}
 		}else if(e.button==3){
-			int lookingAt=findCurrentlySelected(x_location,y_location);
+			int lookingAt=findCurrentlySelected(e.x,e.y);
+			if(lookingAt<Activator.SelectedTest)
+				Activator.SelectedTest--;
+			else if(lookingAt==Activator.SelectedTest)
+				Activator.SelectedTest=-1;
 			Timeline.removeTestFromSet(lookingAt);
 		}
 	}
 
 	@Override
-	public void mouseUp(MouseEvent e) {
-//		int x_location=e.x;
-//		int y_location=e.y;
-		
-	}
+	public void mouseUp(MouseEvent e) {}
 	
 	private int findCurrentlySelected(int x, int y){
 		//TODO for now I'm not going to use y coordinates

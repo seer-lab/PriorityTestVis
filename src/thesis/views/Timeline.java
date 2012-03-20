@@ -43,6 +43,8 @@ public class Timeline extends ViewPart{
 	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
 	
+	private static TestPoolMouseListener tlPoolMouseListener;
+	
 	/**
 	 *  
 	 */
@@ -104,6 +106,9 @@ public class Timeline extends ViewPart{
 		tlMouseClicker=new TimelineMouseClicker();
 		canvasSelected.addMouseListener(tlMouseClicker);
 		
+		tlPoolMouseListener=new TestPoolMouseListener();
+		canvasUnselected.addMouseListener(tlPoolMouseListener);
+		
 		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, nonSelectedList);
 		canvasUnselected.addPaintListener(tlPainterUnSelected);
 	}
@@ -122,7 +127,7 @@ public class Timeline extends ViewPart{
 	
 	
 	/**This will add the test to the set, and remove it from the testpool*/
-	private static void addTestToSet(TestResult testToAdd){
+	public static void addTestToSet(TestResult testToAdd){
 		nonSelectedList.remove(testToAdd);
 		
 		//Remove partial uniqueness
@@ -136,6 +141,28 @@ public class Timeline extends ViewPart{
 		}
 		
 		selectedList.add(testToAdd);
+		
+		updateListeners();
+	}
+	
+	/***/
+	public static void addTestToSet(int x){
+		TestResult test=nonSelectedList.get(x);
+		nonSelectedList.remove(x);
+		
+		//Remove partial uniqueness
+		
+		//Remove true uniqueness
+		
+		
+		selectedList.add(test);
+		
+		updateListeners();
+		
+		updateGraphics();
+	}
+	
+	private static void updateListeners(){
 		tlPainterSelected.update(selectedList);
 		tlPainterUnSelected.update(nonSelectedList);
 		tlMouseHoverSelected.update(selectedList); 
@@ -144,7 +171,6 @@ public class Timeline extends ViewPart{
 	
 	/**This does not work yet, its just a place holder*/
 	static void removeTestFromSet(int index){
-		TestResult testData=selectedList.get(index);
 		selectedList.remove(index);
 		//TODO All tests after the index need to update their lists of detection
 		updateGraphics();
