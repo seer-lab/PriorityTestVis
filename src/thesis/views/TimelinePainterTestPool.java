@@ -18,7 +18,7 @@ public class TimelinePainterTestPool implements PaintListener{
 	private final static int kTotal_time=Activator.TimeGoal;
 	private final static int kMax_kills=200;
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private final static Color kEclipseBackground=new Color(null,220,220,220);
+	private final static Color kEclipseBackground=new Color(null,237,236,235);
 	private final static Color kToolTip=new Color(null,232,242,250);
 	
 	private final static Color kUnique=new Color(null, 74, 88, 155);
@@ -29,6 +29,8 @@ public class TimelinePainterTestPool implements PaintListener{
 	private static ArrayList<TestResult> unselectedList;
 	
 
+	private static boolean hasBeenUpdated=false;
+	
 	/**Used to hold the width so far of each of the tests*/
 	private static ArrayList<Integer> widthSoFar=new ArrayList<Integer>();
 	/**Used to hold the starting xvalues of each of the tests*/
@@ -41,8 +43,11 @@ public class TimelinePainterTestPool implements PaintListener{
 	
 	public void drawGraphics(GC gc){
 		
-		gc.setBackground(kEclipseBackground);
-		gc.fillRectangle(canvas.getClientArea());
+		if(hasBeenUpdated){
+			hasBeenUpdated=false;
+			gc.setBackground(kEclipseBackground);
+			gc.fillRectangle(canvas.getClientArea());
+		}
 		
 		
 		//Draw the Tests
@@ -57,7 +62,7 @@ public class TimelinePainterTestPool implements PaintListener{
 	
 	private void drawToolTip(GC gc){
 		//Draw tooltip of Test hovered over
-		if(Activator.HoverTest>=0&&Activator.poolTooltip){
+		if(Activator.HoverTest>=0&&Activator.poolTooltip&&unselectedList.size()>0){
 			gc.setForeground(kOutline);
 			gc.setBackground(kToolTip);
 			TestResult selectedTest=unselectedList.get(Activator.HoverTest);
@@ -82,6 +87,7 @@ public class TimelinePainterTestPool implements PaintListener{
 	}
 	
 	public void update(ArrayList<TestResult> list){
+		hasBeenUpdated=true;
 		unselectedList=list;
 		widthSoFar.clear();
 		xStart.clear();
@@ -106,6 +112,8 @@ public class TimelinePainterTestPool implements PaintListener{
 		kills=(int)(height_ratio*test.getDetectedMutants().size());
 		
 		int selectedPosition=Activator.SelectedTest;
+		if(selectedPosition<0)
+			selectedPosition=selectedList.size();
 		//loop through the selected list and remove any mutants for this test
 		//That have already been detected, up to the selected position
 		for(int i=0;i<selectedPosition;i++){

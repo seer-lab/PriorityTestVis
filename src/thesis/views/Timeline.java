@@ -37,9 +37,9 @@ public class Timeline extends ViewPart{
 	/**Paints graphics for the test pool*/
 	private static TimelinePainterTestPool tlPainterUnSelected;
 	/**Used to listen for hover events on the selected tests*/
-	private static TimelineMouseHover tlMouseHoverSelected;
+//	private static TimelineMouseHover tlMouseHoverSelected;
 	/**Used to listen for hover events on the test pool*/
-	private static TimelineMouseHover tlMouseHoverPool;
+//	private static TimelineMouseHover tlMouseHoverPool;
 	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
 	
@@ -68,12 +68,12 @@ public class Timeline extends ViewPart{
 	public static void drawSelection(){
 		tlPainterSelected.drawGraphics(gcSelected);
 	}
-	public static void cleanUpAfterToolTip(){
-		if(!Activator.poolTooltip)
-			tlPainterSelected.drawAfterToolTip(gcSelected);
-		else
-			tlPainterUnSelected.drawAfterToolTip(gcUnselected);
-	}
+//	public static void cleanUpAfterToolTip(){
+//		if(!Activator.poolTooltip)
+//			tlPainterSelected.drawAfterToolTip(gcSelected);
+//		else
+//			tlPainterUnSelected.drawAfterToolTip(gcUnselected);
+//	}
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -83,12 +83,13 @@ public class Timeline extends ViewPart{
 		selectionHolder=new Group(parent, SWT.SHADOW_NONE);
 		selectionHolder.setText("Selected Tests");
 		selectionHolder.setLayout(new FillLayout());
-		canvasSelected=new Canvas(selectionHolder,SWT.NONE);
+		canvasSelected=new Canvas(selectionHolder,SWT.DOUBLE_BUFFERED);
+		
 		gcSelected=new GC(canvasSelected);
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
 		poolHolder.setLayout(new FillLayout());
-		canvasUnselected=new Canvas(poolHolder, SWT.NONE|SWT.H_SCROLL);
+		canvasUnselected=new Canvas(poolHolder, SWT.DOUBLE_BUFFERED|SWT.H_SCROLL);
 		gcUnselected=new GC(canvasUnselected);
 		
 		testData=new ArrayList<TestResult>();
@@ -97,11 +98,11 @@ public class Timeline extends ViewPart{
 		
 		tlPainterSelected=new TimelinePainterSelectedTests(canvasSelected,selectedList);
 		canvasSelected.addPaintListener(tlPainterSelected);
-		tlMouseHoverSelected=new TimelineMouseHover(selectedList,false);
-		canvasSelected.addMouseMoveListener(tlMouseHoverSelected);
-		
-		tlMouseHoverPool=new TimelineMouseHover(nonSelectedList,true);
-		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
+//		tlMouseHoverSelected=new TimelineMouseHover(selectedList,false);
+//		canvasSelected.addMouseMoveListener(tlMouseHoverSelected);
+//		
+//		tlMouseHoverPool=new TimelineMouseHover(nonSelectedList,true);
+//		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
 		
 		tlMouseClicker=new TimelineMouseClicker();
 		canvasSelected.addMouseListener(tlMouseClicker);
@@ -115,8 +116,11 @@ public class Timeline extends ViewPart{
 	
 	/**Calls all required methods to update the graphics of the view*/
 	private static void updateGraphics(){
+		//Kludge solution to flicker problem
+		for(int i=0;i<2;i++){
 		tlPainterSelected.drawGraphics(gcSelected);
 		tlPainterUnSelected.drawGraphics(gcUnselected);
+		}
 	}
 	
 	/**Sets focus for the timeline view*/
@@ -131,16 +135,18 @@ public class Timeline extends ViewPart{
 		nonSelectedList.remove(testToAdd);
 		
 		//Remove partial uniqueness
-		testToAdd.removeTrueUniqueness(previously_detected_mutants);
-		testToAdd.removeUniqueness(previously_detected_mutants);
-		previously_detected_mutants.addAll(testToAdd.getDetectedMutants());
-		
-		//Remove true uniqueness
-		for(int i=0;i<selectedList.size();i++){
-			selectedList.get(i).removeTrueUniqueness(testToAdd.getDetectedMutants());
-		}
+//		testToAdd.removeTrueUniqueness(previously_detected_mutants);
+//		testToAdd.removeUniqueness(previously_detected_mutants);
+//		previously_detected_mutants.addAll(testToAdd.getDetectedMutants());
+//		
+//		//Remove true uniqueness
+//		for(int i=0;i<selectedList.size();i++){
+//			selectedList.get(i).removeTrueUniqueness(testToAdd.getDetectedMutants());
+//		}
 		
 		selectedList.add(testToAdd);
+		
+		calculateTestStats();
 		
 		updateListeners();
 	}
@@ -150,21 +156,25 @@ public class Timeline extends ViewPart{
 		TestResult test=nonSelectedList.get(x);
 		nonSelectedList.remove(x);
 		
-		//Remove partial uniqueness
-		test.removeTrueUniqueness(previously_detected_mutants);
-		test.removeUniqueness(previously_detected_mutants);
-		previously_detected_mutants.addAll(test.getDetectedMutants());
 		
-		//Remove true uniqueness
-		for(int i=0;i<selectedList.size();i++){
-			selectedList.get(i).removeTrueUniqueness(test.getDetectedMutants());
-		}
-		if(Activator.SelectedTest>=0){
+//		//Remove partial uniqueness
+//		test.removeTrueUniqueness(previously_detected_mutants);
+//		test.removeUniqueness(previously_detected_mutants);
+//		previously_detected_mutants.addAll(test.getDetectedMutants());
+//		
+//		//Remove true uniqueness
+//		for(int i=0;i<selectedList.size();i++){
+//			selectedList.get(i).removeTrueUniqueness(test.getDetectedMutants());
+//		}
+		if(Activator.SelectedTest>=0){//TODO Recalculate test stats after add
 			selectedList.add(Activator.SelectedTest,test);
 			Activator.SelectedTest++;
 		}else{
 			selectedList.add(test);
 		}
+		
+		calculateTestStats();
+		
 		updateListeners();
 		
 		updateGraphics();
@@ -173,8 +183,8 @@ public class Timeline extends ViewPart{
 	private static void updateListeners(){
 		tlPainterSelected.update(selectedList);
 		tlPainterUnSelected.update(nonSelectedList);
-		tlMouseHoverSelected.update(selectedList); 
-		tlMouseHoverPool.update(nonSelectedList);
+//		tlMouseHoverSelected.update(selectedList); 
+//		tlMouseHoverPool.update(nonSelectedList);
 	}
 	
 	/**This does not work yet, its just a place holder*/
@@ -183,26 +193,33 @@ public class Timeline extends ViewPart{
 		selectedList.remove(index);
 		nonSelectedList.add(test);
 		
-		//Remove the true unique mutants from previously detected
-		previously_detected_mutants.removeAll(test.getTrueUniqueMutants());
+		if(index<Activator.SelectedTest)
+			Activator.SelectedTest--;
+		else if(index==Activator.SelectedTest)
+			Activator.SelectedTest=-1;
 		
-		//Update the newly detected mutants to shift them to the later test that detects them
-		ArrayList<Integer> mutants_detected=test.getUniqueMutants();
-//		System.out.print(mutants_detected.size());
-		for(int q=index;q<selectedList.size();q++){
-			for(int i=0;i<mutants_detected.size();i++){
-				if(selectedList.get(q).getDetectedMutants().contains(mutants_detected.get(i))){
-					selectedList.get(q).getUniqueMutants().add(mutants_detected.get(i));
-					mutants_detected.remove(i);
-					i=0;
-					System.out.print("<"+q+":"+i+">");
-				}
-			}
-		}
-//		System.out.println(":"+mutants_detected.size()+":"+test.getTrueUniqueMutants().size());
+//		//Remove the true unique mutants from previously detected
+//		previously_detected_mutants.removeAll(test.getTrueUniqueMutants());
+//		
+//		//Update the newly detected mutants to shift them to the later test that detects them
+//		ArrayList<Integer> mutants_detected=test.getUniqueMutants();
+//		ArrayList<Boolean> already_been_added=new ArrayList<Boolean>();
+//		for(int i=0;i<mutants_detected.size();i++)
+//			already_been_added.add(false);
+//		
+//		for(int q=index;q<selectedList.size();q++){
+//			for(int i=0;i<mutants_detected.size();i++){
+//				if(selectedList.get(q).getDetectedMutants().contains(mutants_detected.get(i))){
+//					selectedList.get(q).getUniqueMutants().add(mutants_detected.get(i));
+//					mutants_detected.remove(i);
+//					i=0;
+//				}
+//			}
+//		}
+//		
+//		previously_detected_mutants.removeAll(mutants_detected);
 		
-		previously_detected_mutants.removeAll(mutants_detected);
-		
+		calculateTestStats();
 		
 		updateListeners();
 		updateGraphics();
@@ -229,6 +246,28 @@ public class Timeline extends ViewPart{
 	/**Used so other classes can get the width from the canvas*/
 	public static int getUnselectedWidth(){
 		return Timeline.canvasUnselected.getClientArea().width;
+	}
+	
+	private static void calculateTestStats(){
+		//Clear current stats
+		for(int i=0;i<selectedList.size();i++){
+			selectedList.get(i).resetUniqueness();
+		}
+		//Calculate new stats
+		previously_detected_mutants.clear();
+		for(int i=0;i<selectedList.size();i++){
+			selectedList.get(i).removeUniqueness(previously_detected_mutants);
+			selectedList.get(i).removeTrueUniqueness(previously_detected_mutants);
+			previously_detected_mutants.addAll(selectedList.get(i).getDetectedMutants());
+		}
+		
+		for(int i=0;i<selectedList.size();i++){
+			for(int q=0;q<selectedList.size();q++){
+				if(i!=q)
+					selectedList.get(i).removeTrueUniqueness(selectedList.get(q).getDetectedMutants());
+			}
+		}
+		
 	}
 
 }

@@ -30,9 +30,12 @@ public class TestResult {
 				uniqueMutants.remove(comparableData.get(x));
 	}
 	
-//	public void resetUniqueness(){
-//		
-//	}
+	public void resetUniqueness(){
+		trueUniqueMutants.clear();
+		uniqueMutants.clear();
+		trueUniqueMutants.addAll(detectedMutants);
+		uniqueMutants.addAll(detectedMutants);
+	}
 	
 	public int similarNumberOfTests(TestResult t){
 		ArrayList<Integer> mutants=new ArrayList<Integer>();

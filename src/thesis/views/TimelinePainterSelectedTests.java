@@ -36,6 +36,8 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	
 	public TimelinePainterSelectedTests(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
 	
+	private static boolean hasBeenUpdated=false;
+	
 	/**Used to hold the width so far of each of the tests*/
 	private static ArrayList<Integer> widthSoFar=new ArrayList<Integer>();
 	/**Used to hold the starting xvalues of each of the tests*/
@@ -46,8 +48,11 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	
 	public void drawGraphics(GC gc){
 		
-		gc.setBackground(kEclipse);
-		gc.fillRectangle(canvas.getClientArea());
+		if(hasBeenUpdated){
+			hasBeenUpdated=false;
+			gc.setBackground(kEclipse);
+			gc.fillRectangle(canvas.getClientArea());
+		}
 		
 		
 		//Draw the Selected Tests
@@ -57,7 +62,7 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		}
 		
 		//Draw outline on the test that is selected
-		if(selectedList.size()>0){
+		if(selectedList.size()>0&&Activator.SelectedTest>=0){
 			TestResult selectedTest=selectedList.get(Activator.SelectedTest);
 			gc.setForeground(kNonSelectedTrueUnique);
 			int kills=(int)((double)canvas.getClientArea().height/(double)kMax_kills*selectedTest.getDetectedMutants().size());
@@ -69,7 +74,7 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	
 	private void drawToolTip(GC gc){
 		//Draw tooltip of Test hovered over
-		if(Activator.HoverTest>=0&&!Activator.poolTooltip){
+		if(Activator.HoverTest>=0&&!Activator.poolTooltip&&selectedList.size()>0){
 			gc.setForeground(kOutline);
 			gc.setBackground(kToolTip);
 			TestResult selectedTest=selectedList.get(Activator.HoverTest);
@@ -94,6 +99,7 @@ public class TimelinePainterSelectedTests implements PaintListener {
 	}
 	
 	public void update(ArrayList<TestResult> list){
+		hasBeenUpdated=true;
 		selectedList=list;
 		widthSoFar.clear();
 		xStart.clear();

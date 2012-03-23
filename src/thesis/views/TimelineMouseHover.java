@@ -28,7 +28,7 @@ public class TimelineMouseHover implements MouseMoveListener{
 	public void mouseMove(MouseEvent e) {
 		int lookingAt=findCurrentlySelected(e.x,e.y);
 		if(lookingAt!=previously_looking_at){
-			Timeline.cleanUpAfterToolTip();
+//			Timeline.cleanUpAfterToolTip();
 			
 			Activator.HoverTest=Integer.MIN_VALUE;
 			Activator.poolTooltip=isThisTheTestPool;
