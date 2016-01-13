@@ -43,7 +43,7 @@ public class Timeline extends ViewPart{
 	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
 	
-	private static TestPoolMouseListener tlPoolMouseListener;
+//	private static TestPoolMouseListener tlPoolMouseListener;
 	
 	/**
 	 *  
@@ -107,8 +107,8 @@ public class Timeline extends ViewPart{
 		tlMouseClicker=new TimelineMouseClicker();
 		canvasSelected.addMouseListener(tlMouseClicker);
 		
-		tlPoolMouseListener=new TestPoolMouseListener();
-		canvasUnselected.addMouseListener(tlPoolMouseListener);
+//		tlPoolMouseListener=new TestPoolMouseListener();
+//		canvasUnselected.addMouseListener(tlPoolMouseListener);
 		
 		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, nonSelectedList);
 		canvasUnselected.addPaintListener(tlPainterUnSelected);

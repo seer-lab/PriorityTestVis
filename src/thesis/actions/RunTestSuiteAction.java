@@ -1,5 +1,8 @@
 package thesis.actions;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,6 +39,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			Random rand=new Random();
 			
 			//Generate test data
+			/**
 			int mutants_created=Activator.mutantList.size();
 			for(int x=0;x<157;x++){
 				long time=rand.nextInt(300);
@@ -49,7 +53,54 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				TestResult e=new TestResult(x,time,detected_mutants);
 				Activator.getDefault().testList.add(e);
 			}
+			**/
 			
+			String f1 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TOne.txt";
+			String f2 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TTwo.txt";
+			String f3 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TThree.txt";
+			String f4 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFour.txt";
+			String f5 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFive.txt";
+			String fail = "FAILURES!!!";
+			String success = "OK (1 test)";
+			long time=rand.nextInt(300);
+			int id = 0;
+			
+			try {
+				ArrayList<BufferedReader> readers = new ArrayList<BufferedReader>();
+				readers.add(new BufferedReader(new FileReader(f1)));
+				readers.add(new BufferedReader(new FileReader(f2)));
+				readers.add(new BufferedReader(new FileReader(f3)));
+				readers.add(new BufferedReader(new FileReader(f4)));
+				readers.add(new BufferedReader(new FileReader(f5)));
+				
+				// Read each file
+				for(BufferedReader input : readers) {
+					String line = "";
+					int mutantNum = 0;
+					ArrayList<Integer> detected = new ArrayList<Integer>();
+					
+					while ((line = input.readLine()) != null) {
+						if(line.equals(success)) {
+							System.err.println(line);
+
+							mutantNum++;
+							detected.add(mutantNum);
+						} else if(line.equals(fail)) {
+							mutantNum++;
+						}
+					}
+					
+					time += 50;
+					TestResult toAdd = new TestResult(id, time, detected);
+					id++;
+					Activator.getDefault().testList.add(toAdd);
+					
+					input.close();
+				}
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+
 			Timeline.update(Activator.getDefault().testList);
 		}
 		
