@@ -48,9 +48,23 @@ public class Timeline extends ViewPart{
 	/**
 	 *  
 	 */
+	
+	//TODO: Replace all assignment operators with a clear() and addAll()
 	public static void update(ArrayList<TestResult> tests){
-		testData=tests;
-		nonSelectedList=testData;
+		//testData=tests;
+		testData.clear();
+		testData.addAll(tests);
+		
+		System.out.println("Hello from timeline.update");
+		for(TestResult i : testData) {
+			System.out.println(i.getID() + "$");
+		}
+		
+		
+		//nonSelectedList=testData;
+		nonSelectedList.clear();
+		nonSelectedList.addAll(testData);
+		
 		selectedList.clear();
 		selectTestsToAddToSet();
 		updateGraphics();
@@ -58,6 +72,7 @@ public class Timeline extends ViewPart{
 	
 	/**If no tests are specified we only update the graphics*/
 	public static void update(){
+		System.out.println("Empty update");
 		updateGraphics();
 	}
 	
@@ -92,6 +107,7 @@ public class Timeline extends ViewPart{
 		canvasUnselected=new Canvas(poolHolder, SWT.DOUBLE_BUFFERED|SWT.H_SCROLL);
 		gcUnselected=new GC(canvasUnselected);
 		
+		System.out.println("Clearing test data");
 		testData=new ArrayList<TestResult>();
 		selectedList=new ArrayList<TestResult>();
 		nonSelectedList=new ArrayList<TestResult>();
@@ -116,6 +132,10 @@ public class Timeline extends ViewPart{
 	
 	/**Calls all required methods to update the graphics of the view*/
 	private static void updateGraphics(){
+		System.out.println("Hello from timeline.update graphics");
+		for(TestResult i : testData) {
+			System.out.println(i.getID() + "@");
+		}
 		//Kludge solution to flicker problem
 		for(int i=0;i<2;i++){
 		tlPainterSelected.drawGraphics(gcSelected);
@@ -233,6 +253,7 @@ public class Timeline extends ViewPart{
 		if(nonSelectedList.size()>0){
 			while(currentTime<Activator.TimeGoal){
 				if(nonSelectedList.size()==0){
+					System.out.println("nonSelectedList = 0");
 					break;
 				}else{
 					currentTime+=nonSelectedList.get(0).getTime();

@@ -81,8 +81,6 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 					
 					while ((line = input.readLine()) != null) {
 						if(line.equals(success)) {
-							System.err.println(line);
-
 							mutantNum++;
 							detected.add(mutantNum);
 						} else if(line.equals(fail)) {
@@ -95,13 +93,21 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 					id++;
 					Activator.getDefault().testList.add(toAdd);
 					
+					//try{Thread.sleep(time);}catch(InterruptedException e){};
 					input.close();
 				}
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
+			
+			System.out.println("Hello from runTestSuite");
+			for(TestResult i : Activator.getDefault().testList) {
+				System.out.println(i.getID());
+			}
 
 			Timeline.update(Activator.getDefault().testList);
+			//Print out timeline data here
+			//Because of static use, threading problems
 		}
 		
 	}

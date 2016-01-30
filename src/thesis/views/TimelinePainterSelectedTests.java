@@ -147,7 +147,7 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		if(!(index_of_this_test==Activator.SelectedTest)&&Activator.SelectedTest>-1){
 			System.out.println("***********************************");
 			for(TestResult t : Timeline.testData) {
-				System.out.println(t.getID());
+				System.out.println(t.getID() + "*");
 			}
 			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testData.get(Activator.SelectedTest)));
 			gc.setBackground(kNonSelectedTrueUnique);
