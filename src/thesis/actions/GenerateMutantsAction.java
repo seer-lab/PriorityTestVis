@@ -43,6 +43,7 @@ public class GenerateMutantsAction implements IWorkbenchWindowActionDelegate {
 		Activator.mutantList.clear();
 		Activator.testList.clear();
 		
+		//TODO: Need to fix to use real data
 		//Generate some fake results
 		Random rand=new Random();
 		for(int x=0;x<5;x++){

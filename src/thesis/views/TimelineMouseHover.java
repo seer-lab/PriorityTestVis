@@ -51,7 +51,7 @@ public class TimelineMouseHover implements MouseMoveListener{
 				return i;
 			
 		}
-		return Timeline.selectedList.size();
+		return Timeline.testSuite.size();
 	}
 	
 	private void drawTheToolTip(int x,int y){

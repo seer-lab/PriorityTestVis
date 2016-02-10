@@ -87,6 +87,7 @@ public class TimelinePainterTestPool implements PaintListener{
 	}
 	
 	public void update(ArrayList<TestResult> list){
+		System.out.println("TestPool paint update");
 		hasBeenUpdated=true;
 		unselectedList=list;
 		widthSoFar.clear();
@@ -107,7 +108,7 @@ public class TimelinePainterTestPool implements PaintListener{
 		int kills,killsUnique,killsTrueUnique;
 		ArrayList<Integer> newly_detected_mutants=new ArrayList<Integer>();
 		newly_detected_mutants.addAll(test.getDetectedMutants());
-		ArrayList<TestResult> selectedList=Timeline.selectedList;
+		ArrayList<TestResult> selectedList=Timeline.testSuite;
 		
 		kills=(int)(height_ratio*test.getDetectedMutants().size());
 		

@@ -47,13 +47,13 @@ public class TimelineMouseClicker implements MouseListener{
 		//I'm just going to match the x value with the matching test
 		//In the selected tests
 		int total=0;
-		for(int i=0;i<Timeline.selectedList.size();i++){
-			total+=Timeline.selectedList.get(i).getTime()*Timeline.getUnselectedWidth()/Activator.TimeGoal;
+		for(int i=0;i<Timeline.testSuite.size();i++){
+			total+=Timeline.testSuite.get(i).getTime()*Timeline.getUnselectedWidth()/Activator.TimeGoal;
 			if(total>x)
 				return i;
 			
 		}
-		return Timeline.selectedList.size();
+		return Timeline.testSuite.size();
 	}
 
 }
