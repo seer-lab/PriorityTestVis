@@ -23,17 +23,16 @@ import thesis.views.Timeline;
 
 public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 	private IWorkbenchWindow window;
-	public RunTestSuiteAction(){System.out.println("Hello from runTestSuite - constructor");}
+	public RunTestSuiteAction(){}
 	@Override
 	public void run(IAction action) {
-		System.out.println("Hello from runTestSuite - run");
 //		MessageDialog.openInformation(
 //				window.getShell(),
 //				"Thesis",
 //				"Allow the user to select the test suite they wish to use and" +
 //				"run it against the generated mutants" +
 //				"\n "+Activator.getDefault().mutantList.size()+" mutants");
-		//if(Activator.getDefault().mutantList.size()!=0){
+		if(Activator.getDefault().mutantList.size()!=0){
 			
 			
 			Activator.getDefault().testList.clear();
@@ -63,7 +62,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			String f5 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFive.txt";
 			String fail = "FAILURES!!!";
 			String success = "OK (1 test)";
-			long time=300;
+			long time=rand.nextInt(300);
 			int id = 0;
 			
 			try {
@@ -89,7 +88,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 						}
 					}
 					
-					//time += 50;
+					time += 50;
 					TestResult toAdd = new TestResult(id, time, detected);
 					id++;
 					Activator.getDefault().testList.add(toAdd);
@@ -105,12 +104,11 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			for(TestResult i : Activator.getDefault().testList) {
 				System.out.println(i.getID());
 			}
-			
-			//Update canvas display with initial data
+
 			Timeline.update(Activator.getDefault().testList);
 			//Print out timeline data here
 			//Because of static use, threading problems
-		//}
+		}
 		
 	}
 
@@ -122,7 +120,6 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 
 	@Override
 	public void init(IWorkbenchWindow window) {
-		System.out.println("Hello from runTestSuite - init");
 		this.window=window;
 	}
 

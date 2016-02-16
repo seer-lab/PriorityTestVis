@@ -18,12 +18,6 @@ public class Timeline extends ViewPart{
 	/**Identifies this view for eclipse*/
 	public static final String ID = "testview.views.SampleView";
 	
-	/**
-	 * Refactored names of variables:
-	 * testData -> testPool
-	 * selectedTests -> testSuite
-	 * nonSelectedTests -> unusedTests
-	 */
 	/**The list of all the Test data for the test suite*/
 	public static ArrayList<TestResult> testPool;
 	/**The list of all tests which have been removed from the pool*/
@@ -32,18 +26,16 @@ public class Timeline extends ViewPart{
 	public static ArrayList<TestResult> unusedTests;
 	
 	private static Canvas canvasSelected,canvasUnselected;
-	private static GC gcTestSuite,gcUnusedTests;
+	private static GC gcSelected,gcUnselected;
 	private static Group selectionHolder;
 	private static Group poolHolder;
 	
-	//TODO: Figure out what this stores
-	//Stores mutants that are currently in the test suite when calculating uniqueness for test results
 	private static ArrayList<Integer> previously_detected_mutants=new ArrayList<Integer>();
 	
 	/**Paints graphics for the selected tests*/
-	private static TimelinePainterTestSuite tlPainterTestSuite;
+	private static TimelinePainterTestSuite tlPainterSelected;
 	/**Paints graphics for the test pool*/
-	private static TimelinePainterTestPool tlPainterUnusedTests;
+	private static TimelinePainterTestPool tlPainterUnSelected;
 	/**Used to listen for hover events on the selected tests*/
 //	private static TimelineMouseHover tlMouseHoverSelected;
 	/**Used to listen for hover events on the test pool*/
@@ -57,21 +49,23 @@ public class Timeline extends ViewPart{
 	 *  
 	 */
 	
-	//Updates timeline display with newest testing mutant data
+	//TODO: Replace all assignment operators with a clear() and addAll()
 	public static void update(ArrayList<TestResult> tests){
 		//testData=tests;
 		testPool.clear();
 		testPool.addAll(tests);
 		
-		printList("update", testPool, "testPool");
+		System.out.println("Hello from timeline.update");
+		for(TestResult i : testPool) {
+			System.out.println(i.getID() + "$");
+		}
 		
-		//On initialization testSuite contains no tests
-		testSuite.clear();
 		
 		//nonSelectedList=testData;
 		unusedTests.clear();
 		unusedTests.addAll(testPool);
 		
+		testSuite.clear();
 		selectTestsToAddToSet();
 		updateGraphics();
 	}
@@ -83,11 +77,11 @@ public class Timeline extends ViewPart{
 	}
 	
 	public static void drawPool(){
-		tlPainterUnusedTests.drawGraphics(gcUnusedTests);
+		tlPainterUnSelected.drawGraphics(gcUnselected);
 	}
 	
 	public static void drawSelection(){
-		tlPainterTestSuite.drawGraphics(gcTestSuite);
+		tlPainterSelected.drawGraphics(gcSelected);
 	}
 //	public static void cleanUpAfterToolTip(){
 //		if(!Activator.poolTooltip)
@@ -106,20 +100,20 @@ public class Timeline extends ViewPart{
 		selectionHolder.setLayout(new FillLayout());
 		canvasSelected=new Canvas(selectionHolder,SWT.DOUBLE_BUFFERED);
 		
-		gcTestSuite=new GC(canvasSelected);
+		gcSelected=new GC(canvasSelected);
 		poolHolder=new Group(parent, SWT.SHADOW_NONE);
 		poolHolder.setText("Test Pool");
 		poolHolder.setLayout(new FillLayout());
 		canvasUnselected=new Canvas(poolHolder, SWT.DOUBLE_BUFFERED|SWT.H_SCROLL);
-		gcUnusedTests=new GC(canvasUnselected);
+		gcUnselected=new GC(canvasUnselected);
 		
 		System.out.println("Clearing test data");
 		testPool=new ArrayList<TestResult>();
 		testSuite=new ArrayList<TestResult>();
 		unusedTests=new ArrayList<TestResult>();
 		
-		tlPainterTestSuite=new TimelinePainterTestSuite(canvasSelected,testSuite);
-		canvasSelected.addPaintListener(tlPainterTestSuite);
+		tlPainterSelected=new TimelinePainterTestSuite(canvasSelected,testSuite);
+		canvasSelected.addPaintListener(tlPainterSelected);
 //		tlMouseHoverSelected=new TimelineMouseHover(selectedList,false);
 //		canvasSelected.addMouseMoveListener(tlMouseHoverSelected);
 //		
@@ -132,30 +126,21 @@ public class Timeline extends ViewPart{
 //		tlPoolMouseListener=new TestPoolMouseListener();
 //		canvasUnselected.addMouseListener(tlPoolMouseListener);
 		
-		tlPainterUnusedTests=new TimelinePainterTestPool(canvasUnselected, unusedTests);
-		canvasUnselected.addPaintListener(tlPainterUnusedTests);
+		tlPainterUnSelected=new TimelinePainterTestPool(canvasUnselected, unusedTests);
+		canvasUnselected.addPaintListener(tlPainterUnSelected);
 	}
 	
 	/**Calls all required methods to update the graphics of the view*/
 	private static void updateGraphics(){
-		printList("updateGraphics", testSuite, "testSuite");
-		//Kludge solution to flicker problem
-		//for(int i=0;i<2;i++){
-		tlPainterTestSuite.drawGraphics(gcTestSuite);
-		
-		printList("updateGraphics", unusedTests, "unusedTests");
-		tlPainterUnusedTests.drawGraphics(gcUnusedTests);
-		
-		//}
-	}
-
-	private static void printList(String location, ArrayList<TestResult> curr, String name) {
-		System.out.println("*************************");
-		System.out.println("METHOD: " + location + " LIST: " + name);
-		for(TestResult i : curr) {
+		System.out.println("Hello from timeline.update graphics");
+		for(TestResult i : testPool) {
 			System.out.println(i.getID() + "@");
 		}
-		System.out.println("*************************");
+		//Kludge solution to flicker problem
+		for(int i=0;i<2;i++){
+		tlPainterSelected.drawGraphics(gcSelected);
+		tlPainterUnSelected.drawGraphics(gcUnselected);
+		}
 	}
 	
 	/**Sets focus for the timeline view*/
@@ -184,9 +169,6 @@ public class Timeline extends ViewPart{
 		calculateTestStats();
 		
 		updateListeners();
-		
-		printList("addTestToSet", unusedTests, "unusedTests");
-		printList("addTestToSet", testSuite, "testSuite");
 	}
 	
 	/***/
@@ -216,14 +198,11 @@ public class Timeline extends ViewPart{
 		updateListeners();
 		
 		updateGraphics();
-		
-		printList("addTestToSet", unusedTests, "unusedTests");
-		printList("addTestToSet", testSuite, "testSuite");
 	}
 	
 	private static void updateListeners(){
-		tlPainterTestSuite.update(testSuite);
-		tlPainterUnusedTests.update(unusedTests);
+		tlPainterSelected.update(testSuite);
+		tlPainterUnSelected.update(unusedTests);
 //		tlMouseHoverSelected.update(selectedList); 
 //		tlMouseHoverPool.update(nonSelectedList);
 	}
@@ -274,7 +253,7 @@ public class Timeline extends ViewPart{
 		if(unusedTests.size()>0){
 			while(currentTime<Activator.TimeGoal){
 				if(unusedTests.size()==0){
-					System.out.println("unused = 0");
+					System.out.println("nonSelectedList = 0");
 					break;
 				}else{
 					currentTime+=unusedTests.get(0).getTime();
@@ -282,7 +261,7 @@ public class Timeline extends ViewPart{
 				}
 			}
 		}
-		tlPainterUnusedTests.update(unusedTests);
+		tlPainterUnSelected.update(unusedTests);
 	}
 
 	/**Used so other classes can get the width from the canvas*/

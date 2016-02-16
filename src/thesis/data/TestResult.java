@@ -58,7 +58,6 @@ public class TestResult {
 		testID=id;
 		time=t;
 		detectedMutants.addAll(detected);
-		// TODO: Need to make sure unique mutants is set properly
 		trueUniqueMutants=detected;
 		uniqueMutants.addAll(detectedMutants);
 	}

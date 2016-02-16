@@ -87,7 +87,6 @@ public class TimelinePainterTestPool implements PaintListener{
 	}
 	
 	public void update(ArrayList<TestResult> list){
-		System.out.println("TestPool paint update");
 		hasBeenUpdated=true;
 		unselectedList=list;
 		widthSoFar.clear();

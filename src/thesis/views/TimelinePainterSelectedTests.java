@@ -13,10 +13,9 @@ import org.eclipse.swt.widgets.Display;
 import thesis.Activator;
 import thesis.data.TestResult;
 
-public class TimelinePainterTestSuite implements PaintListener {
+public class TimelinePainterSelectedTests implements PaintListener {
 	private final static int kTotal_time=Activator.TimeGoal;
-	//TODO: Need to rework so this is determined dynamically from data
-	private static int kMax_kills=7;
+	private final static int kMax_kills=200;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kEclipse=new Color(null,237,236,235);
@@ -35,7 +34,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 	private static Canvas canvas;
 	private static ArrayList<TestResult> selectedList;
 	
-	public TimelinePainterTestSuite(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
+	public TimelinePainterSelectedTests(Canvas c,ArrayList<TestResult> list){canvas=c;selectedList=list;}
 	
 	private static boolean hasBeenUpdated=false;
 	
@@ -54,6 +53,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 			gc.setBackground(kEclipse);
 			gc.fillRectangle(canvas.getClientArea());
 		}
+		
 		
 		//Draw the Selected Tests
 		for(int i=0;i<selectedList.size();i++){
@@ -146,10 +146,10 @@ public class TimelinePainterTestSuite implements PaintListener {
 		//Draw indicators for test relating to the selected test
 		if(!(index_of_this_test==Activator.SelectedTest)&&Activator.SelectedTest>-1){
 			System.out.println("***********************************");
-			for(TestResult t : Timeline.testPool) {
+			for(TestResult t : Timeline.testData) {
 				System.out.println(t.getID() + "*");
 			}
-			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testPool.get(Activator.SelectedTest)));
+			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testData.get(Activator.SelectedTest)));
 			gc.setBackground(kNonSelectedTrueUnique);
 			if(index_of_this_test<Activator.SelectedTest){
 				gc.fillRectangle(xStart.get(index_of_this_test),total_height-killsUnique,widthSoFar.get(index_of_this_test),similarNumberOfTest);
