@@ -60,8 +60,8 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			String f3 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TThree.txt";
 			String f4 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFour.txt";
 			String f5 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFive.txt";
-			String fail = "FAILURES!!!";
-			String success = "OK (1 test)";
+			String detectedMessage = "FAILURES!!!";
+			String missMessage = "OK (1 test)";
 			long time=rand.nextInt(300);
 			int id = 0;
 			
@@ -80,10 +80,10 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 					ArrayList<Integer> detected = new ArrayList<Integer>();
 					
 					while ((line = input.readLine()) != null) {
-						if(line.equals(success)) {
+						if(line.equals(detectedMessage)) {
 							mutantNum++;
 							detected.add(mutantNum);
-						} else if(line.equals(fail)) {
+						} else if(line.equals(missMessage)) {
 							mutantNum++;
 						}
 					}

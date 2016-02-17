@@ -60,7 +60,6 @@ public class Timeline extends ViewPart{
 			System.out.println(i.getID() + "$");
 		}
 		
-		
 		//nonSelectedList=testData;
 		unusedTests.clear();
 		unusedTests.addAll(testPool);
@@ -68,6 +67,16 @@ public class Timeline extends ViewPart{
 		testSuite.clear();
 		selectTestsToAddToSet();
 		updateGraphics();
+		
+		for(TestResult i : testPool) {
+			System.out.println("%%%%%% " + i.getID());
+			for(Integer j : i.getDetectedMutants()) {
+				System.out.println("D " + j.toString());
+			}
+			for(Integer j : i.getTrueUniqueMutants()) {
+				System.out.println("U " + j.toString());
+			}
+		}
 	}
 	
 	/**If no tests are specified we only update the graphics*/
