@@ -62,7 +62,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			String f5 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFive.txt";
 			String detectedMessage = "FAILURES!!!";
 			String missMessage = "OK (1 test)";
-			long time=rand.nextInt(300);
+			long time=1000;
 			int id = 0;
 			
 			try {
@@ -88,7 +88,7 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 						}
 					}
 					
-					time += 50;
+					//time += 50;
 					TestResult toAdd = new TestResult(id, time, detected);
 					id++;
 					Activator.getDefault().testList.add(toAdd);

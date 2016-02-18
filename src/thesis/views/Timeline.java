@@ -37,9 +37,9 @@ public class Timeline extends ViewPart{
 	/**Paints graphics for the test pool*/
 	private static TimelinePainterTestPool tlPainterUnSelected;
 	/**Used to listen for hover events on the selected tests*/
-//	private static TimelineMouseHover tlMouseHoverSelected;
+	private static TimelineMouseHover tlMouseHoverSelected;
 	/**Used to listen for hover events on the test pool*/
-//	private static TimelineMouseHover tlMouseHoverPool;
+	private static TimelineMouseHover tlMouseHoverPool;
 	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
 	
@@ -73,7 +73,7 @@ public class Timeline extends ViewPart{
 			for(Integer j : i.getDetectedMutants()) {
 				System.out.println("D " + j.toString());
 			}
-			for(Integer j : i.getTrueUniqueMutants()) {
+			for(Integer j : i.getUniqueMutants()) {
 				System.out.println("U " + j.toString());
 			}
 		}
@@ -123,11 +123,11 @@ public class Timeline extends ViewPart{
 		
 		tlPainterSelected=new TimelinePainterTestSuite(canvasSelected,testSuite);
 		canvasSelected.addPaintListener(tlPainterSelected);
-//		tlMouseHoverSelected=new TimelineMouseHover(selectedList,false);
-//		canvasSelected.addMouseMoveListener(tlMouseHoverSelected);
-//		
-//		tlMouseHoverPool=new TimelineMouseHover(nonSelectedList,true);
-//		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
+		tlMouseHoverSelected=new TimelineMouseHover(testSuite,false);
+		canvasSelected.addMouseMoveListener(tlMouseHoverSelected);
+		
+		tlMouseHoverPool=new TimelineMouseHover(unusedTests,true);
+		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
 		
 		tlMouseClicker=new TimelineMouseClicker();
 		canvasSelected.addMouseListener(tlMouseClicker);
@@ -212,8 +212,8 @@ public class Timeline extends ViewPart{
 	private static void updateListeners(){
 		tlPainterSelected.update(testSuite);
 		tlPainterUnSelected.update(unusedTests);
-//		tlMouseHoverSelected.update(selectedList); 
-//		tlMouseHoverPool.update(nonSelectedList);
+		tlMouseHoverSelected.update(testSuite); 
+		tlMouseHoverPool.update(unusedTests);
 	}
 	
 	/**This does not work yet, its just a place holder*/
