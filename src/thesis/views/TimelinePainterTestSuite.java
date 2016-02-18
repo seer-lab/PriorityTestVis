@@ -82,7 +82,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 					+selectedTest.getUniqueMutants().size()+" Newly Detected Mutants\n"
 					+selectedTest.getTrueUniqueMutants().size()+" Uniquely Detected Mutants\n"
 					+selectedTest.getTime()/1000.0+" Seconds\n"
-					,xStart.get(Activator.HoverTest+1), canvas.getClientArea().height/2);
+					,xStart.get(Activator.HoverTest), canvas.getClientArea().height/2);
 		}
 	}
 	
