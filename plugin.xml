@@ -17,7 +17,7 @@
          </menu>
          <action
                label="&amp;Generate Mutants"
-               icon="icons/mutant.gif"
+               icon="src/thesis/views/icons/mutant.gif"
                class="thesis.actions.GenerateMutantsAction"
                tooltip="Generate Mutants"
                menubarPath="thesisMenu/thesisGroup"
@@ -26,7 +26,7 @@
          </action>
          <action
          		label="&amp;Run Test Suite"
-         		icon="icons/test.gif"
+         		icon="src/thesis/views/icons/test.gif"
          		class="thesis.actions.RunTestSuiteAction"
          		tooltip="Run Test Suite"
          		menubarPath="thesisMenu/thesisGroup"
@@ -35,7 +35,7 @@
          </action>
          <action
          		label="&amp;Change Time Limit"
-         		icon="icons/sample.gif"
+         		icon="src/thesis/views/icons/sample.gif"
          		class="thesis.actions.ChangeTimeLimit"
          		tooltip="Change Time Limit"
          		menubarPath="thesisMenu/thesisGroup"
@@ -54,7 +54,7 @@
       </category>
       <view
             name="Timeline"
-            icon="icons/sample.gif"
+            icon="src/thesis/views/icons/sample.gif"
             category="Timeline"
             class="thesis.views.Timeline"
             id="thesis.views.Timeline">

@@ -16,7 +16,7 @@ import thesis.data.TestResult;
 public class TimelinePainterTestSuite implements PaintListener {
 	private final static int kTotal_time=Activator.TimeGoal;
 	//TODO: Need to rework so this is determined dynamically from data
-	private static int kMax_kills=7;
+	private static int kMax_kills=170;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kEclipse=new Color(null,237,236,235);

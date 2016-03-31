@@ -55,11 +55,17 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 			}
 			**/
 			
-			String f1 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TOne.txt";
-			String f2 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TTwo.txt";
-			String f3 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TThree.txt";
-			String f4 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFour.txt";
-			String f5 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/TFive.txt";
+			String f1 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest01.txt";
+			String f2 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest02.txt";
+			String f3 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest03.txt";
+			String f4 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest04.txt";
+			String f5 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest05.txt";
+			String f6 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest06.txt";
+			String f7 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest07.txt";
+			String f8 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest08.txt";
+			String f9 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest09.txt";
+			String f10 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest10.txt";
+			String f11 = "C:/Users/100455689/Desktop/Thesis/muJava/testset/fit/ParseTest11.txt";
 			String detectedMessage = "FAILURES!!!";
 			String missMessage = "OK (1 test)";
 			long time=1000;
@@ -72,6 +78,12 @@ public class RunTestSuiteAction implements IWorkbenchWindowActionDelegate{
 				readers.add(new BufferedReader(new FileReader(f3)));
 				readers.add(new BufferedReader(new FileReader(f4)));
 				readers.add(new BufferedReader(new FileReader(f5)));
+				readers.add(new BufferedReader(new FileReader(f6)));
+				readers.add(new BufferedReader(new FileReader(f7)));
+				readers.add(new BufferedReader(new FileReader(f8)));
+				readers.add(new BufferedReader(new FileReader(f9)));
+				readers.add(new BufferedReader(new FileReader(f10)));
+				readers.add(new BufferedReader(new FileReader(f11)));
 				
 				// Read each file
 				for(BufferedReader input : readers) {

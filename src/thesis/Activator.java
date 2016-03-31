@@ -33,7 +33,7 @@ public class Activator extends AbstractUIPlugin {
 	/**The Test Suite we are evaluating*/
 	public static ArrayList<TestResult> testList;
 	/**The time limit we have set for our test evaluation*/
-	public static int TimeGoal=3000;
+	public static int TimeGoal=15000;
 	
 	/**The test the user has selected*/
 	public static int SelectedTest=-1;

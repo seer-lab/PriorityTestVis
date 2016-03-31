@@ -1,6 +1,9 @@
 package thesis.views;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -43,6 +46,10 @@ public class Timeline extends ViewPart{
 	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
 	
+	// Target parameters for fitness functions set by user
+	private double TargetTime;
+	int TargetScore;
+	
 //	private static TestPoolMouseListener tlPoolMouseListener;
 	
 	/**
@@ -66,6 +73,9 @@ public class Timeline extends ViewPart{
 		
 		testSuite.clear();
 		selectTestsToAddToSet();
+		greedySolution(testSuite, unusedTests);
+		tlPainterSelected.update(testSuite);
+		tlPainterUnSelected.update(unusedTests);
 		updateGraphics();
 		
 		for(TestResult i : testPool) {
@@ -297,6 +307,122 @@ public class Timeline extends ViewPart{
 					testSuite.get(i).removeTrueUniqueness(testSuite.get(q).getDetectedMutants());
 			}
 		}
+		
+	}
+	
+	// Fitness function that gives higher score based on better mutantscore without going over target time
+	// Higher scores are better
+	private static int fitnessOnScore(ArrayList<TestResult> solution, double targetTime) {
+		double time = 0.0;
+		int score = 0;
+		
+		for(TestResult i: solution) {
+			score += i.getUniqueMutants().size();
+			time += i.getTime();
+		}
+		
+		if(time > targetTime) {
+			return 0;
+		} else {
+			return score;
+		}
+	}
+	
+	// Fitness function that gives higher score based on best time while maintining minimum mutant score
+	// Higher scores are better
+	private static double fitnessOnTime(ArrayList<TestResult> solution, int targetScore) {
+		double time = 0.0;
+		int score = 0;
+		
+		for(TestResult i: solution) {
+			score += i.getUniqueMutants().size();
+			time += i.getTime();
+		}
+		
+		if(score < targetScore) {
+			return Double.MIN_VALUE;
+		} else {
+			return 1/time;
+		}
+	}
+	
+	// Hash Map represents a test suite and its corresponding unused tests
+	private void geneticRemove(HashMap<ArrayList<TestResult>,ArrayList<TestResult>> solutions) {
+		double targetTime = 8000;
+		
+		// Perform genetic operations
+		Set<ArrayList<TestResult>> keys = solutions.keySet();
+		for(ArrayList<TestResult> i: keys) {
+			greedySwitch(i, solutions.get(i));
+			
+			// Sort new solutions based on scores
+			HashMap<ArrayList<TestResult>,Integer> scores = new HashMap<ArrayList<TestResult>,Integer>();
+			int score = fitnessOnScore(i, targetTime);
+			
+		}
+		
+		// Evalute against stopping criteria
+		
+		// Call genericRemove with new solutions
+		
+	}
+	
+	private static void greedySolution(ArrayList<TestResult> testSuite, ArrayList<TestResult> unused) {
+		//TODO: Should be set by user
+		double targetTime = 8000;
+		int targetScore = 0;
+		
+		double time = 0;
+		Iterator<TestResult> iter = testSuite.iterator();
+		while(iter.hasNext()) {
+			TestResult i = iter.next();
+			double newTime = time + i.getTime();
+			
+			if (newTime <= targetTime) {
+				time = newTime;
+			} else {
+				iter.remove();
+				unused.add(i);
+			}
+		}
+		
+		boolean changed = true;
+		while(changed) {
+			changed = greedySwitch(testSuite,unused);
+		}
+		
+	}
+	
+	private static boolean greedySwitch(ArrayList<TestResult> testSuite, ArrayList<TestResult> unused) {
+		TestResult max = unused.get(0);
+		TestResult min = testSuite.get(0);
+		
+		for(TestResult i: testSuite) {
+			if(i.getUniqueMutants().size() < min.getUniqueMutants().size()) {
+				min = i;
+			}
+		}
+		
+		for(TestResult i: unused) {
+			if(i.getUniqueMutants().size() > max.getUniqueMutants().size()) {
+				max = i;
+			}
+		}
+		
+		if(min.getUniqueMutants().equals(0) && !(max.getUniqueMutants().equals(0))) {
+			int testSuiteLoc = testSuite.indexOf(min);
+			testSuite.remove(testSuiteLoc);
+			testSuite.add(testSuiteLoc, max);
+			
+			int unusedLoc = unused.indexOf(max);
+			unused.remove(unusedLoc);
+			unused.add(unusedLoc, min);
+			
+			return true;
+		}
+		
+		return false;
+		
 		
 	}
 
