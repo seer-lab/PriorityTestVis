@@ -145,11 +145,8 @@ public class TimelinePainterSelectedTests implements PaintListener {
 		
 		//Draw indicators for test relating to the selected test
 		if(!(index_of_this_test==Activator.SelectedTest)&&Activator.SelectedTest>-1){
-			System.out.println("***********************************");
-			for(TestResult t : Timeline.testData) {
-				System.out.println(t.getID() + "*");
-			}
-			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testData.get(Activator.SelectedTest)));
+			
+			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testSuite.get(Activator.SelectedTest)));
 			gc.setBackground(kNonSelectedTrueUnique);
 			if(index_of_this_test<Activator.SelectedTest){
 				gc.fillRectangle(xStart.get(index_of_this_test),total_height-killsUnique,widthSoFar.get(index_of_this_test),similarNumberOfTest);

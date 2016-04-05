@@ -49,8 +49,11 @@ public class TimelineMouseClicker implements MouseListener{
 		int total=0;
 		for(int i=0;i<Timeline.testSuite.size();i++){
 			total+=Timeline.testSuite.get(i).getTime()*Timeline.getUnselectedWidth()/Activator.TimeGoal;
-			if(total>x)
+			if(total>x) {
+				System.out.println("Looking at " + i);
 				return i;
+			}
+				
 			
 		}
 		return Timeline.testSuite.size();

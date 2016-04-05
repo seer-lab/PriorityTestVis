@@ -1,5 +1,8 @@
 package thesis.views;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -62,11 +65,6 @@ public class Timeline extends ViewPart{
 		testPool.clear();
 		testPool.addAll(tests);
 		
-		System.out.println("Hello from timeline.update");
-		for(TestResult i : testPool) {
-			System.out.println(i.getID() + "$");
-		}
-		
 		//nonSelectedList=testData;
 		unusedTests.clear();
 		unusedTests.addAll(testPool);
@@ -78,15 +76,6 @@ public class Timeline extends ViewPart{
 		tlPainterUnSelected.update(unusedTests);
 		updateGraphics();
 		
-		for(TestResult i : testPool) {
-			System.out.println("%%%%%% " + i.getID());
-			for(Integer j : i.getDetectedMutants()) {
-				System.out.println("D " + j.toString());
-			}
-			for(Integer j : i.getUniqueMutants()) {
-				System.out.println("U " + j.toString());
-			}
-		}
 	}
 	
 	/**If no tests are specified we only update the graphics*/
@@ -151,10 +140,7 @@ public class Timeline extends ViewPart{
 	
 	/**Calls all required methods to update the graphics of the view*/
 	private static void updateGraphics(){
-		System.out.println("Hello from timeline.update graphics");
-		for(TestResult i : testPool) {
-			System.out.println(i.getID() + "@");
-		}
+		
 		//Kludge solution to flicker problem
 		for(int i=0;i<2;i++){
 		tlPainterSelected.drawGraphics(gcSelected);
@@ -272,7 +258,6 @@ public class Timeline extends ViewPart{
 		if(unusedTests.size()>0){
 			while(currentTime<Activator.TimeGoal){
 				if(unusedTests.size()==0){
-					System.out.println("nonSelectedList = 0");
 					break;
 				}else{
 					currentTime+=unusedTests.get(0).getTime();
@@ -368,29 +353,39 @@ public class Timeline extends ViewPart{
 	}
 	
 	private static void greedySolution(ArrayList<TestResult> testSuite, ArrayList<TestResult> unused) {
-		//TODO: Should be set by user
-		double targetTime = 8000;
-		int targetScore = 0;
 		
-		double time = 0;
-		Iterator<TestResult> iter = testSuite.iterator();
-		while(iter.hasNext()) {
-			TestResult i = iter.next();
-			double newTime = time + i.getTime();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("C:/Users/100455689/Desktop/Thesis/Past Work/config.json"));
 			
-			if (newTime <= targetTime) {
-				time = newTime;
-			} else {
-				iter.remove();
-				unused.add(i);
+			in.readLine();
+			String timeString = in.readLine().split(": ")[1].split(",")[0];
+			double targetTime = Double.parseDouble(timeString);
+			
+			String scoreString = in.readLine().split(": ")[1];
+			int targetScore = Integer.parseInt(scoreString);
+			
+			double time = 0;
+			Iterator<TestResult> iter = testSuite.iterator();
+			while(iter.hasNext()) {
+				TestResult i = iter.next();
+				double newTime = time + i.getTime();
+				
+				if (newTime <= targetTime) {
+					time = newTime;
+				} else {
+					iter.remove();
+					unused.add(i);
+				}
 			}
+			
+			boolean changed = true;
+			while(changed) {
+				changed = greedySwitch(testSuite,unused);
+			}
+
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
-		
-		boolean changed = true;
-		while(changed) {
-			changed = greedySwitch(testSuite,unused);
-		}
-		
 	}
 	
 	private static boolean greedySwitch(ArrayList<TestResult> testSuite, ArrayList<TestResult> unused) {

@@ -145,10 +145,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 		
 		//Draw indicators for test relating to the selected test
 		if(!(index_of_this_test==Activator.SelectedTest)&&Activator.SelectedTest>-1){
-			System.out.println("***********************************");
-			for(TestResult t : Timeline.testPool) {
-				System.out.println(t.getID() + "*");
-			}
+			
 			int similarNumberOfTest=(int)(height_ratio*test.similarNumberOfTests(Timeline.testPool.get(Activator.SelectedTest)));
 			gc.setBackground(kNonSelectedTrueUnique);
 			if(index_of_this_test<Activator.SelectedTest){
