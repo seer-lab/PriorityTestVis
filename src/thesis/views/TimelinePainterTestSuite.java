@@ -16,7 +16,7 @@ import thesis.data.TestResult;
 public class TimelinePainterTestSuite implements PaintListener {
 	private final static int kTotal_time=Activator.TimeGoal;
 	//TODO: Need to rework so this is determined dynamically from data
-	private static int kMax_kills=170;
+	private static int kMax_kills=50;
 	
 	private final static Color kOutline=Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 	private final static Color kEclipse=new Color(null,237,236,235);
@@ -51,6 +51,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 		
 		if(hasBeenUpdated){
 			hasBeenUpdated=false;
+			System.out.println("Draw graphics: " + canvas.getClientArea().toString());
 			gc.setBackground(kEclipse);
 			gc.fillRectangle(canvas.getClientArea());
 		}
@@ -73,6 +74,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 	}
 	
 	private void drawToolTip(GC gc){
+		
 		//Draw tooltip of Test hovered over
 		if(Activator.HoverTest>=0&&!Activator.poolTooltip&&selectedList.size()>0){
 			gc.setForeground(kOutline);
@@ -84,6 +86,7 @@ public class TimelinePainterTestSuite implements PaintListener {
 					+selectedTest.getTime()/1000.0+" Seconds\n"
 					,xStart.get(Activator.HoverTest), canvas.getClientArea().height/2);
 		}
+		hasBeenUpdated=true;
 	}
 	
 	public void drawAfterToolTip(GC gc){

@@ -48,7 +48,8 @@ public class Timeline extends ViewPart{
 	private static TimelineMouseHover tlMouseHoverPool;
 	/**Used to handle mouse clicks over the selected tests*/
 	private static TimelineMouseClicker tlMouseClicker;
-	
+	private static TimelineMouseClicker tlUnusedClicker;
+
 	// Target parameters for fitness functions set by user
 	private double TargetTime;
 	int TargetScore;
@@ -128,8 +129,11 @@ public class Timeline extends ViewPart{
 		tlMouseHoverPool=new TimelineMouseHover(unusedTests,true);
 		canvasUnselected.addMouseMoveListener(tlMouseHoverPool);
 		
-		tlMouseClicker=new TimelineMouseClicker();
+		tlMouseClicker=new TimelineMouseClicker(false);
 		canvasSelected.addMouseListener(tlMouseClicker);
+		
+		tlUnusedClicker=new TimelineMouseClicker(true);
+		canvasUnselected.addMouseListener(tlUnusedClicker);
 		
 //		tlPoolMouseListener=new TestPoolMouseListener();
 //		canvasUnselected.addMouseListener(tlPoolMouseListener);

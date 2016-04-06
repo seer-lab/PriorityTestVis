@@ -37,6 +37,7 @@ public class Activator extends AbstractUIPlugin {
 	
 	/**The test the user has selected*/
 	public static int SelectedTest=-1;
+	public static int UnselectedTests=-1;
 	
 	/**The index of the test that is being hovered over*/
 	public static int HoverTest=-1;
